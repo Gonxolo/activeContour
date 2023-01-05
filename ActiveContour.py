@@ -1,7 +1,10 @@
+import numpy as np
+
+
 class ActiveContour:
 
     # TODO: Aqui recibimos los parametros para inicializar el algoritmo
-    def __init__(self, image: str, x_coords: list[int], y_coords: list[int], alpha: float = 0.1, beta: float = 0.25,
+    def __init__(self, image: list[list], x_coords: list[int], y_coords: list[int], alpha: float = 0.1, beta: float = 0.25,
                  gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, gvf_iterations: int = 100,
                  iterations: int = 200) -> None:
 
@@ -36,9 +39,9 @@ class ActiveContour:
         :param iterations: The number of iterations to use in calculating the snake positions. Default: 200.
         """
 
-        self.image = image
-        self.xCoords = x_coords
-        self.yCoords = y_coords
+        self.image = np.array(image)
+        self.xCoords = np.array(x_coords)
+        self.yCoords = np.array(y_coords)
         self.alpha = max(alpha, 0.001)
         self.beta = max(beta, 0.001)
         self.gamma = max(gamma, 0.1)
