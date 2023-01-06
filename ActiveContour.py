@@ -52,6 +52,8 @@ class ActiveContour:
 
         # pU (edgeMap)
         # pV (edgeMap)
+        self.u = None
+        self.v = None
 
         # Manejar errores
 
@@ -63,7 +65,10 @@ class ActiveContour:
 
         # Puntero a coordenadas X e Y
 
-        # Calcular npts igual a largo de X o 0 si es None
+        # Calcular npts igual a largo de X o 0 si es None/si es invalido
+
+        self.npts = self.xCoords if self.xCoords is not None else 0
+
         pass
 
     def laplacian(self, image) -> np.ndarray:
