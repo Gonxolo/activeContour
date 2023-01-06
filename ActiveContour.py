@@ -89,12 +89,32 @@ class ActiveContour:
     # TODO: Computar el campo GGVF para el contorno activo
     def calcGGVF(self) -> None:
 
-        # Calcular gradientes [fx, fy] para inicializar el vetor campo [u, v]
-        # self->edgeMap (se llama al metodo edgeMap)
-            # self->gradient (se llama al metodo gradient)
+        # Calculate gradients [fx, fy] to initialize the vector field [u, v].
+        self.edgeMap()
 
-        # Se resuelve iterativamente para el GGVF [u, v]
-            # self->laplacian (se llama al metodo laplacian)
+        # Original version for the GGVF by Xu99
+        # b = np.square(self.u) + np.square(self.v)
+        b = np.abs(self.u) + np.abs(self.v)
+
+        # This pair of functions act as an "enhancer/de-enhancer" of high gradient neighbors the choice of the functions
+        # must satisfy some convergence restrictions (see reference) TODO: agregar referencia
+        g = np.exp(-b / self.mu)
+        c1 = self.u * (np.ones(g.shape[0]) - g)
+        c2 = self.v * (np.ones(g.shape[0]) - g)
+
+        # Solve iteratively for the GGVF [u, v]
+        # delta_x = delta_y = delta_t = 1
+        for j in range(self.gvf_iterations):
+            u_lap = self.laplacian(self.u)
+            v_lap = self.laplacian(self.v)
+
+            # Original iteration scheme
+            # self.u += g * u_lap - h * (self.u - fx)
+            # self.v += g * v_lap - h * (self.v - fy)
+
+            # Optimized iteration scheme
+            self.u = g * (self.u + u_lap) + c1
+            self.v = g * (self.v + v_lap) + c2
 
         return
 
