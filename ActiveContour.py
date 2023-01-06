@@ -207,7 +207,7 @@ class ActiveContour:
     def edgeMap(self) -> None:
 
         edge_map = np.sqrt(np.square(self.gradient(self.image, 0)) + np.square(self.gradient(self.image, 1)))
-        min_val = np.min(edge_map)
+        min_val = np.min(edge_map) # TODO: este valor por defecto podia serr 0, hablar con Jorge
         max_val = np.max(edge_map)
 
         if max_val != min_val:
