@@ -85,12 +85,32 @@ class ActiveContour:
 
     # TODO:
     def getPerimeter(self) -> None:
+        p = self.getDistance(self)
+        return np.sum(p)
+    
+    def getDistance(self, xyRes = [1.,1.]) -> float:
+        dx = np.square(np.roll(self.xCoords,-1)-self.xCoords*xyRes[0])
+        dy = np.square(np.roll(self.yCoords,-1)-self.yCoords*xyRes[1])
+        distance = np.power(np.add(dx, dy), 0.5)
         return
 
     # TODO:
     def arcSample(self) -> None:
+        #utiliza interpolación cúbica //scipy.interpolate.CubicSpline
         return
 
     # TODO: aqui pasan muchas cosas
     def adjustContour(self) -> None:
+        #llama función polygonPerimeter()
+        #self -> arcSample (llama función arcSample)
+        #matriz pentadiagonal -> scipy.sparse.diags
+        #invierte matriz con numpy.linalg.inv(A) (usa descompos. LU) (status ?)
+        #interpolation -> cubic convolution interpolation method
+        #s_HausdorffDistanceFor2Dpoints
+        #calcNorm_L1ForVector
+        #calcNorm_L2ForVector
+        #calcNorm_LInfiniteForVector
+        #calcNorm_LInfiniteForVector
         return
+
+
