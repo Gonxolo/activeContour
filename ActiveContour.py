@@ -66,6 +66,20 @@ class ActiveContour:
         # Calcular npts igual a largo de X o 0 si es None
         pass
 
+    def laplacian(self, image) -> np.ndarray:
+
+        kernel = np.zeros((5, 5))
+        kernel[0, 2] = 0.0833333
+        kernel[1, 1:4] = 0.0833333
+        kernel[2, :] = 0.0833333
+        kernel[3, 1:4] = 0.0833333
+        kernel[4, 2] = 0.0833333
+        kernel[2, 2] = -1.0
+
+        # return convol(image, kernel, center=1, /edge_truncate)
+        return convolve(image, kernel, mode='nearest')
+
+
     # TODO: Computar el campo GGVF para el contorno activo
     def calcGGVF(self) -> None:
 
