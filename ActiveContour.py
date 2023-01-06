@@ -1,3 +1,4 @@
+import numpy as np
 class ActiveContour:
 
     # TODO: Aqui recibimos los parametros para inicializar el algoritmo
@@ -77,6 +78,7 @@ class ActiveContour:
 
     # TODO: Plotear el campo GVF
     def plotGVF(self) -> None:
+        #revisar plt.streamploat
         return
 
     # TODO: Setear las [x, y] coordenadas para el contorno activo
@@ -84,15 +86,29 @@ class ActiveContour:
         return
 
     # TODO:
-    def getPerimeter(self) -> None:
-        p = self.getDistance(self)
+    def getPerimeter(self,xyRes = [1.,1.]) -> float:
+        """Calcula el perímetro de un contorno
+
+        Return:
+        Float con perímetro total.
+        Obs: en caso xCoords inválido, retorna -1.
+        """
+        p = self.getDistance(self, xyRes)
         return np.sum(p)
     
-    def getDistance(self, xyRes = [1.,1.]) -> float:
+    def getDistance(self, xyRes = [1.,1.]) -> list[float]:
+        """Calcula la distancia entre coordenadas consecutivas
+        
+        Parámetros:
+        Parámetro opcional: xyRes = [1.,1.] por defecto.
+
+        Return:
+        Array de floats distancia euclideana puntos de segmentos.
+        Obs: en caso xCoords inválido, retorna -1.
+        """
         dx = np.square(np.roll(self.xCoords,-1)-self.xCoords*xyRes[0])
         dy = np.square(np.roll(self.yCoords,-1)-self.yCoords*xyRes[1])
-        distance = np.power(np.add(dx, dy), 0.5)
-        return
+        return np.power(np.add(dx, dy), 0.5)
 
     # TODO:
     def arcSample(self) -> None:
