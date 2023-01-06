@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.ndimage import convolve
 
 
 class ActiveContour:
@@ -52,6 +53,8 @@ class ActiveContour:
 
         # pU (edgeMap)
         # pV (edgeMap)
+        self.u = None
+        self.v = None
 
         # Manejar errores
 
@@ -63,18 +66,55 @@ class ActiveContour:
 
         # Puntero a coordenadas X e Y
 
-        # Calcular npts igual a largo de X o 0 si es None
+        # Calcular npts igual a largo de X o 0 si es None/si es invalido
+
+        self.npts = self.xCoords if self.xCoords is not None else 0
+
         pass
+
+    def laplacian(self, image) -> np.ndarray:
+
+        kernel = np.zeros((5, 5))
+        kernel[0, 2] = 0.0833333
+        kernel[1, 1:4] = 0.0833333
+        kernel[2, :] = 0.0833333
+        kernel[3, 1:4] = 0.0833333
+        kernel[4, 2] = 0.0833333
+        kernel[2, 2] = -1.0
+
+        # return convol(image, kernel, center=1, /edge_truncate)
+        return convolve(image, kernel, mode='nearest')
+
 
     # TODO: Computar el campo GGVF para el contorno activo
     def calcGGVF(self) -> None:
 
-        # Calcular gradientes [fx, fy] para inicializar el vetor campo [u, v]
-        # self->edgeMap (se llama al metodo edgeMap)
-            # self->gradient (se llama al metodo gradient)
+        # Calculate gradients [fx, fy] to initialize the vector field [u, v].
+        self.edgeMap()
 
-        # Se resuelve iterativamente para el GGVF [u, v]
-            # self->laplacian (se llama al metodo laplacian)
+        # Original version for the GGVF by Xu99
+        # b = np.square(self.u) + np.square(self.v)
+        b = np.abs(self.u) + np.abs(self.v)
+
+        # This pair of functions act as an "enhancer/de-enhancer" of high gradient neighbors the choice of the functions
+        # must satisfy some convergence restrictions (see reference) TODO: agregar referencia
+        g = np.exp(-b / self.mu)
+        c1 = self.u * (np.ones(g.shape[0]) - g)
+        c2 = self.v * (np.ones(g.shape[0]) - g)
+
+        # Solve iteratively for the GGVF [u, v]
+        # delta_x = delta_y = delta_t = 1
+        for j in range(self.gvf_iterations):
+            u_lap = self.laplacian(self.u)
+            v_lap = self.laplacian(self.v)
+
+            # Original iteration scheme
+            # self.u += g * u_lap - h * (self.u - fx)
+            # self.v += g * v_lap - h * (self.v - fy)
+
+            # Optimized iteration scheme
+            self.u = g * (self.u + u_lap) + c1
+            self.v = g * (self.v + v_lap) + c2
 
         return
 
@@ -134,4 +174,44 @@ class ActiveContour:
         #calcNorm_LInfiniteForVector
         return
 
+    # Se asume un int en direction TODO: deberia poder admitir vectores?
+    # TODO: este metodo puede ser estatico
+    def gradient(self, image: np.ndarray, direction: int) -> np.ndarray:
 
+        # TODO: si la direccion admite vectores entonces
+        # Revisa la cantidad de elementos de la direccion
+        # if n_elements(direction) == 0 -> direction = 0
+
+        # Chequeo de la dimension de la imagen
+        # Si la dimension no es 2 retornar -1
+
+        # IDL: shift
+        # Python: np.roll. Reference: https://numpy.org/doc/stable/reference/generated/numpy.roll.html
+
+        # np matrix accessors reference:
+        # https://stackoverflow.com/questions/4455076/how-do-i-access-the-ith-column-of-a-numpy-multidimensional-array
+
+        if direction == 0:
+            theGradient = (np.roll(image, -1, axis=1) - np.roll(image, 1, axis=1)) * 0.5
+            theGradient[:, 0] = theGradient[:, 1]
+            theGradient[:, theGradient.shape[1] - 1] = theGradient[:, theGradient.shape[1] - 2]
+        elif direction == 1:
+            theGradient = (np.roll(image, -1, axis=0) - np.roll(image, 1, axis=0)) * 0.5
+            theGradient[0, :] = theGradient[1, :]
+            theGradient[theGradient.shape[0] - 1, :] = theGradient[theGradient.shape[0] - 2, :]
+        else:
+            return -1 # Reemplazar este valor por algo mas indicativo. Una excepcion si solo se recibe direccion {0, 1}
+
+        return theGradient
+
+    def edgeMap(self) -> None:
+
+        edge_map = np.sqrt(np.square(self.gradient(self.image, 0)) + np.square(self.gradient(self.image, 1)))
+        min_val = np.min(edge_map) # TODO: este valor por defecto podia serr 0, hablar con Jorge
+        max_val = np.max(edge_map)
+
+        if max_val != min_val:
+            edge_map = np.array([(i - min_val)/(max_val - min_val) for i in edge_map])
+
+        self.u = self.gradient(edge_map, 0)
+        self.v = self.gradient(edge_map, 1)
