@@ -193,12 +193,12 @@ class ActiveContour:
 
         if direction == 0:
             theGradient = (np.roll(image, -1, axis=1) - np.roll(image, 1, axis=1)) * 0.5
-            theGradient[0, :] = theGradient[1, :]
-            theGradient[theGradient.shape[1] - 1, :] = theGradient[theGradient.shape[1] - 2, :]
+            theGradient[:, 0] = theGradient[:, 1]
+            theGradient[:, theGradient.shape[1] - 1] = theGradient[:, theGradient.shape[1] - 2]
         elif direction == 1:
             theGradient = (np.roll(image, -1, axis=0) - np.roll(image, 1, axis=0)) * 0.5
-            theGradient[:, 0] = theGradient[1, :]
-            theGradient[:, theGradient.shape[0] - 1] = theGradient[:, theGradient.shape[0] - 2]
+            theGradient[0, :] = theGradient[1, :]
+            theGradient[theGradient.shape[0] - 1, :] = theGradient[theGradient.shape[0] - 2, :]
         else:
             return -1 # Reemplazar este valor por algo mas indicativo. Una excepcion si solo se recibe direccion {0, 1}
 
