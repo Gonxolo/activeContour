@@ -86,8 +86,11 @@ class ActiveContour:
         return
 
     # TODO:
-    def getPerimeter(self,xyRes = [1.,1.]) -> float:
+    def getPerimeter(self,xyRes = [1,1]) -> float:
         """Calcula el perímetro de un contorno
+
+        Parámetros:
+        Parámetro: xyRes = [1,1] por defecto.
 
         Return:
         Float con perímetro total.
@@ -96,11 +99,11 @@ class ActiveContour:
         p = self.getDistance(self, xyRes)
         return np.sum(p)
     
-    def getDistance(self, xyRes = [1.,1.]) -> list[float]:
+    def getDistance(self, xyRes = [1,1]) -> list[float]:
         """Calcula la distancia entre coordenadas consecutivas
         
         Parámetros:
-        Parámetro opcional: xyRes = [1.,1.] por defecto.
+        Parámetro: xyRes = [1,1] por defecto.
 
         Return:
         Array de floats distancia euclideana puntos de segmentos.
@@ -108,7 +111,7 @@ class ActiveContour:
         """
         dx = np.square(np.roll(self.xCoords,-1)-self.xCoords*xyRes[0])
         dy = np.square(np.roll(self.yCoords,-1)-self.yCoords*xyRes[1])
-        return np.power(np.add(dx, dy), 0.5)
+        return np.power(dx + dy, 0.5)
 
     # TODO:
     def arcSample(self) -> None:
@@ -122,7 +125,7 @@ class ActiveContour:
         #matriz pentadiagonal -> scipy.sparse.diags
         #invierte matriz con numpy.linalg.inv(A) (usa descompos. LU) (status ?)
         #interpolation -> cubic convolution interpolation method
-        #s_HausdorffDistanceFor2Dpoints
+        #s_HausdorffDistanceFor2Dpoints -> scipy.spatial.distance.directed_hausdorff
         #calcNorm_L1ForVector
         #calcNorm_L2ForVector
         #calcNorm_LInfiniteForVector
