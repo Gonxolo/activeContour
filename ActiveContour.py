@@ -80,6 +80,7 @@ class ActiveContour:
 
     # TODO: Plotear el campo GVF
     def plotGVF(self) -> None:
+        #revisar plt.streamploat
         return
 
     # TODO: Setear las [x, y] coordenadas para el contorno activo
@@ -87,13 +88,50 @@ class ActiveContour:
         return
 
     # TODO:
-    def getPerimeter(self) -> None:
-        return
+    def getPerimeter(self,xyRes = [1,1]) -> float:
+        """The function calculates the perimeter of a contour.
+
+        Parameters:
+        Parameter 1: xyRes, set to [1,1] if it is not given.
+
+        Return:
+        A float with the value of the perimeter.
+        Obs: in case xCoords is an invalid value, it returns -1.
+        """
+        p = self.getDistance(self, xyRes)
+        return np.sum(p)
+    
+    def getDistance(self, xyRes = [1,1]) -> list[float]:
+        """The function calculates the distance between consecutive points.
+        
+        Parameters:
+        Parameter 1: xyRes, set to [1,1] if it is not given.
+
+        Return:
+        Array of floats with the euclidean distance between the consecutive points of a segment.
+        Obs: in case xCoords is an invalid value, it returns -1.
+        """
+        dx = np.square(np.roll(self.xCoords,-1)-self.xCoords*xyRes[0])
+        dy = np.square(np.roll(self.yCoords,-1)-self.yCoords*xyRes[1])
+        return np.power(dx + dy, 0.5)
 
     # TODO:
     def arcSample(self) -> None:
+        #utiliza interpolación cúbica //scipy.interpolate.CubicSpline
         return
 
     # TODO: aqui pasan muchas cosas
     def adjustContour(self) -> None:
+        #llama función polygonPerimeter()
+        #self -> arcSample (llama función arcSample)
+        #matriz pentadiagonal -> scipy.sparse.diags
+        #invierte matriz con numpy.linalg.inv(A) (usa descompos. LU) (status ?)
+        #interpolation -> cubic convolution interpolation method
+        #s_HausdorffDistanceFor2Dpoints -> scipy.spatial.distance.directed_hausdorff
+        #calcNorm_L1ForVector
+        #calcNorm_L2ForVector
+        #calcNorm_LInfiniteForVector
+        #calcNorm_LInfiniteForVector
         return
+
+
