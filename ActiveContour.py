@@ -117,3 +117,45 @@ class ActiveContour:
     # TODO: aqui pasan muchas cosas
     def adjustContour(self) -> None:
         return
+
+    # Se asume un int en direction TODO: deberia poder admitir vectores?
+    # TODO: este metodo puede ser estatico
+    def gradient(self, image: np.ndarray, direction: int) -> np.ndarray:
+
+        # TODO: si la direccion admite vectores entonces
+        # Revisa la cantidad de elementos de la direccion
+        # if n_elements(direction) == 0 -> direction = 0
+
+        # Chequeo de la dimension de la imagen
+        # Si la dimension no es 2 retornar -1
+
+        # IDL: shift
+        # Python: np.roll. Reference: https://numpy.org/doc/stable/reference/generated/numpy.roll.html
+
+        # np matrix accessors reference:
+        # https://stackoverflow.com/questions/4455076/how-do-i-access-the-ith-column-of-a-numpy-multidimensional-array
+
+        if direction == 0:
+            theGradient = (np.roll(image, -1, axis=1) - np.roll(image, 1, axis=1)) * 0.5
+            theGradient[0, :] = theGradient[1, :]
+            theGradient[theGradient.shape[1] - 1, :] = theGradient[theGradient.shape[1] - 2, :]
+        elif direction == 1:
+            theGradient = (np.roll(image, -1, axis=0) - np.roll(image, 1, axis=0)) * 0.5
+            theGradient[:, 0] = theGradient[1, :]
+            theGradient[:, theGradient.shape[0] - 1] = theGradient[:, theGradient.shape[0] - 2]
+        else:
+            return -1 # Reemplazar este valor por algo mas indicativo. Una excepcion si solo se recibe direccion {0, 1}
+
+        return theGradient
+
+    def edgeMap(self) -> None:
+
+        edge_map = np.sqrt(np.square(self.gradient(self.image, 0)) + np.square(self.gradient(self.image, 1)))
+        min_val = np.min(edge_map)
+        max_val = np.max(edge_map)
+
+        if max_val != min_val:
+            edge_map = np.array([(i - min_val)/(max_val - min_val) for i in edge_map])
+
+        self.u = self.gradient(edge_map, 0)
+        self.v = self.gradient(edge_map, 1)
