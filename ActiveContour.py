@@ -87,27 +87,27 @@ class ActiveContour:
 
     # TODO:
     def getPerimeter(self,xyRes = [1,1]) -> float:
-        """Calcula el perímetro de un contorno
+        """The function calculates the perimeter of a contour.
 
-        Parámetros:
-        Parámetro: xyRes = [1,1] por defecto.
+        Parameters:
+        Parameter 1: xyRes, set to [1,1] if it is not given.
 
         Return:
-        Float con perímetro total.
-        Obs: en caso xCoords inválido, retorna -1.
+        A float with the value of the perimeter.
+        Obs: in case xCoords is an invalid value, it returns -1.
         """
         p = self.getDistance(self, xyRes)
         return np.sum(p)
     
     def getDistance(self, xyRes = [1,1]) -> list[float]:
-        """Calcula la distancia entre coordenadas consecutivas
+        """The function calculates the distance between consecutive points.
         
-        Parámetros:
-        Parámetro: xyRes = [1,1] por defecto.
+        Parameters:
+        Parameter 1: xyRes, set to [1,1] if it is not given.
 
         Return:
-        Array de floats distancia euclideana puntos de segmentos.
-        Obs: en caso xCoords inválido, retorna -1.
+        Array of floats with the euclidean distance between the consecutive points of a segment.
+        Obs: in case xCoords is an invalid value, it returns -1.
         """
         dx = np.square(np.roll(self.xCoords,-1)-self.xCoords*xyRes[0])
         dy = np.square(np.roll(self.yCoords,-1)-self.yCoords*xyRes[1])
