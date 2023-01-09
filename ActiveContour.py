@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.ndimage import convolve
+from scipy.interpolate import CubicSpline
 
 
 class ActiveContour:
@@ -128,37 +129,123 @@ class ActiveContour:
         return
 
     # TODO:
-    def getPerimeter(self,xyRes = [1,1]) -> float:
+    def getPerimeter(self,xyRes = np.array([1.,1.])) -> float:
         """The function calculates the perimeter of a contour.
 
         Parameters:
-        Parameter 1: xyRes, set to [1,1] if it is not given.
+        -----------
+        xyRes: np.ndarray of floats, optional.
+        Resolution of the image. Default: np.array([1,1]).
 
-        Return:
-        A float with the value of the perimeter.
+        Returns:
+        -------
+        float
+        Value of the perimeter of a contour.
         Obs: in case xCoords is an invalid value, it returns -1.
         """
         p = self.getDistance(self, xyRes)
         return np.sum(p)
     
-    def getDistance(self, xyRes = [1,1]) -> list[float]:
+    def getDistance(self, xyRes = np.array([1.,1.])) -> np.ndarray:
         """The function calculates the distance between consecutive points.
         
         Parameters:
-        Parameter 1: xyRes, set to [1,1] if it is not given.
+        -----------
+        xyRes: np.ndarray of floats, optional.
+        Resolution of the image. Default: np.array([1,1]).
 
-        Return:
+        Returns:
+        -------
+        np.ndarray
         Array of floats with the euclidean distance between the consecutive points of a segment.
         Obs: in case xCoords is an invalid value, it returns -1.
         """
-        dx = np.square(np.roll(self.xCoords,-1)-self.xCoords*xyRes[0])
-        dy = np.square(np.roll(self.yCoords,-1)-self.yCoords*xyRes[1])
-        return np.power(dx + dy, 0.5)
+        dx = np.square(np.roll(self.xCoords, -1) - self.xCoords * xyRes[0])
+        dy = np.square(np.roll(self.yCoords, -1) - self.yCoords * xyRes[1])
+        return np.sqrt(dx + dy)
 
     # TODO:
-    def arcSample(self) -> None:
-        #utiliza interpolación cúbica //scipy.interpolate.CubicSpline
-        return
+    def arcSample(self, points = 50, f_close = None) -> None:
+        """_summary_
+
+        Parameters
+        ----------
+        points : int, optional
+            _description_, by default 50
+        f_close : _type_, optional
+            _description_, by default None
+        """
+        #if size(*self.pX,/n_dimensions) eq 2 then begin, x_in = reform(*self.pX) ...
+        x_in = self.xCoords
+        y_in = self.yCoords
+
+        npts = len(x_in)
+        #Make sure the curve is closed (first point same as last point).
+        f_close = bool(f_close)
+        if f_close:
+            if (x_in[0] != x_in[npts - 1]) or (y_in[0] != y_in[npts - 1]):
+                ss = np.concatenate((s0, s1), axis = None)
+                x_in = np.concatenate((x_in, np.array([x_in[0]])))
+                y_in = np.concatenate((y_in, np.array([y_in[0]])))
+                # print, "Active contour interpolation warning: adding 1 point to close the contour,
+                # according to the specified input"
+                npts += 1
+        else:
+            points -= 1
+        
+        #Interpolate very finely
+        nc = (npts - 1) * 100
+        t = np.arange(npts)
+        t1 = np.arange(nc + 1) / 100 
+        csx = CubicSpline(t, x_in) 
+        x1 = csx(t1)
+        csy = CubicSpline(t, y_in)
+        y1 = csy(t1)
+
+        if f_close:
+            #computes the boundary condition for the cubic spline: derivatives at the beggining and end points are the same
+            avgSlopeX = (x1[1] - x1[0] + x1[nc] - x1[nc - 1]) / (t1[1] - t1[0]) * 0.5
+            avgSlopeY = (y1[1] - y1[0] + y1[nc] - y1[nc - 1]) / (t1[1] - t1[0]) * 0.5
+            dx1 = CubicSpline(t, x_in, bc_type = ((1, avgSlopeX), (1, avgSlopeX))) 
+            dy1 = CubicSpline(t, y_in, bc_type = ((1, avgSlopeY), (1, avgSlopeY))) 
+
+        else:
+            #computes the boundary condition for the cubic spline: derivatives at the beggining and end points
+            avgSlopeX0 = (x1[1] - x1[0]) / (t1[1] - t1[0])
+            avgSlopeX1 = (x1[nc] - x1[nc - 1]) / (t1[nc] - t1[nc - 1])
+            avgSlopeY0 = (y1[1] - y1[0]) / (t1[1] - t1[0])
+            avgSlopeY1 = (y1[nc] - y1[nc - 1]) / (t1[nc] - t1[nc - 1])
+            dx1 = CubicSpline(t, x_in, bc_type = ((1, avgSlopeX0), (1, avgSlopeX1))) 
+            dy1 = CubicSpline(t, y_in, bc_type = ((1, avgSlopeY0), (1, avgSlopeY1))) 
+        
+        x1 = dx1(t1)
+        y1 = dy1(t1)
+
+        #compute cumulative path length.
+        ds = np.sqrt(np.square((x1[1:] - x1)) + np.square((y1[1:] - y1)))
+        s0 = np.array([0])
+        s1 = np.cumsum(ds)
+        ss = np.concatenate((s0, s1), axis = None)
+
+        #Invert this curve, solve for TX, which should be evenly sampled in the arc length space.
+        sx = np.arange(npts) * (ss[nc] / points)
+        cstx = CubicSpline(ss, t1)
+        tx = cstx(sx)
+
+        #Reinterpolate the original points using the new values of TX and optionally close the contour.
+        if f_close:
+            x_out = dx1(tx)
+            y_out = dy1(tx)
+            self.xCoords = np.concatenate((x_out, np.array(x_out[0])), axis = None)
+            self.yCoords = np.concatenate((y_out, np.array(y_out[0])), axis = None)
+        else:
+            x_out = dx1(tx)
+            y_out = dy1(tx)
+            self.xCoords = np.concatenate((x_out, np.array(x_in[npts - 1])), axis = None)
+            self.yCoords = np.concatenate((y_out, np.array(y_in[npts - 1])), axis = None)
+        
+        self.npts = len(self.xCoords)
+        
 
     # TODO: aqui pasan muchas cosas
     def adjustContour(self) -> None:
