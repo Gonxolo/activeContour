@@ -1,5 +1,8 @@
 import numpy as np
+from scipy import interpolate
 from scipy.ndimage import convolve
+
+from geometryFunctions import polygon_perimeter
 
 
 class ActiveContour:
@@ -9,8 +12,7 @@ class ActiveContour:
                  gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, gvf_iterations: int = 100,
                  iterations: int = 200) -> None:
 
-        """
-        [Descripcion de la clase]
+        """[Descripcion de la clase]
 
         :param image: Image file for which the active contour (snake) will be applied.
                         This argument must be 2D.
@@ -41,8 +43,8 @@ class ActiveContour:
         """
 
         self.image = np.array(image)
-        self.xCoords = np.array(x_coords)
-        self.yCoords = np.array(y_coords)
+        self.x = np.array(x_coords)
+        self.y = np.array(y_coords)
         self.alpha = max(alpha, 0.001)
         self.beta = max(beta, 0.001)
         self.gamma = max(gamma, 0.1)
@@ -68,11 +70,18 @@ class ActiveContour:
 
         # Calcular npts igual a largo de X o 0 si es None/si es invalido
 
-        self.npts = self.xCoords if self.xCoords is not None else 0
+        self.npts = self.x if self.x is not None else 0
 
         pass
 
-    def laplacian(self, image) -> np.ndarray:
+    def laplacian(self, image: np.ndarray) -> np.ndarray:
+
+        """
+        [Descripcion de la clase]
+
+        :param image: [Descripcion del parametro]
+
+        """
 
         kernel = np.zeros((5, 5))
         kernel[0, 2] = 0.0833333
@@ -123,8 +132,19 @@ class ActiveContour:
         #revisar plt.streamploat
         return
 
-    # TODO: Setear las [x, y] coordenadas para el contorno activo
-    def setContour(self) -> None:
+    def setContour(self, x: list, y: list) -> None:
+        """Set the [x, y] coordinates for the active contour.
+
+        Parameters
+        ----------
+        x : list
+            `x` coordinate array of the contour to be set.
+        y : list
+            `y` coordinate array of the contour to be set.
+        """
+        self.x = np.array(x)
+        self.y = np.array(y)
+        self.npts = np.copy(self.x)
         return
 
     # TODO:
@@ -151,8 +171,8 @@ class ActiveContour:
         Array of floats with the euclidean distance between the consecutive points of a segment.
         Obs: in case xCoords is an invalid value, it returns -1.
         """
-        dx = np.square(np.roll(self.xCoords,-1)-self.xCoords*xyRes[0])
-        dy = np.square(np.roll(self.yCoords,-1)-self.yCoords*xyRes[1])
+        dx = np.square(np.roll(self.x,-1)-self.x*xyRes[0])
+        dy = np.square(np.roll(self.y,-1)-self.y*xyRes[1])
         return np.power(dx + dy, 0.5)
 
     # TODO:
@@ -161,7 +181,142 @@ class ActiveContour:
         return
 
     # TODO: aqui pasan muchas cosas
-    def adjustContour(self) -> None:
+    def adjustContour(self, perimeter_factor, f_close, plot_contour, fix_point_count, 
+                        fix_point_indices, f_keep_point_count, f_compute_convergence, 
+                        convergence_thresh, convergence_metric_type, 
+                        convergence_metric_value) -> None:
+        """Runs the GVF Active Contour code to completion.
+
+        Parameters
+        ----------
+        perimeter_factor : _type_
+            _description_
+        f_close : _type_
+            _description_
+        plot_contour : _type_
+            _description_
+        fix_point_count : _type_
+            _description_
+        fix_point_indices : _type_
+            _description_
+        f_keep_point_count : _type_
+            _description_
+        f_compute_convergence : _type_
+            _description_
+        convergence_thresh : _type_
+            _description_
+        convergence_metric_type : _type_
+            _description_
+        convergence_metric_value : _type_
+            _description_
+
+        Returns
+        -------
+        The {x, y} contour point list.
+        """
+
+        if len(plot_contour) == 0: plot_contour = 0
+
+        # checkear si x e y son validos sino return -1
+
+        if len(fix_point_indices) > 0:
+            fix_point_count = len(fix_point_indices)
+        else:
+            if len(fix_point_count) > 0:
+                fix_point_count = np.max(fix_point_count, 0)
+            else:
+                fix_point_count = 0
+        
+        try:
+            if fix_point_count == 0:
+                npts_iter = np.max(round(polygon_perimeter(self.x, self.y) * np.max(perimeter_factor, 0.1)), 5)
+            else:
+                npts_iter = self.npts
+
+        except NameError: # En caso de que perimeter_factor no este definido
+            npts_iter = self.npts
+        
+        if npts_iter != self.npts: # TODO: and ~keyword_set(fKeepPointCount)
+            self.arcSample(points=npts_iter, f_close=f_close)
+
+        perimeter_it0 = polygon_perimeter(self.x, self.y)
+
+        alpha = np.full(npts_iter, self.alpha)
+        beta = np.full(npts_iter, self.beta)
+        a = beta
+        b = -alpha - 4*beta
+        c = 2*alpha + 6*beta
+        vfx = 0.0
+        vfy = 0.0
+
+        abc_matrix = np.diag(a[0:npts_iter-2], 2) + np.diag(a[npts_iter-2:npts_iter], -(npts_iter-2)) \
+                    + np.diag(b[0:npts_iter-1], 1) + np.diag(b[npts_iter-1], -(npts_iter-1)) \
+                    + np.diag(c + self.gamma) \
+                    + np.diag(b[0:npts_iter-1], -1) + np.diag(b[npts_iter-1], (npts_iter-1)) \
+                    + np.diag(a[0:npts_iter-2], -2) + np.diag(a[npts_iter-2:npts_iter], (npts_iter-2))
+
+        inv_array = np.linalg.inv(abc_matrix)
+
+        f_use_convergence_threshold = bool(convergence_thresh) or (convergence_thresh == 0) # TODO: convergence_thresh == 0 -> False
+        f_compute_convergence = f_compute_convergence \
+                                or convergence_metric_value \
+                                or f_use_convergence_threshold
+
+        if f_compute_convergence:
+            try:
+                var_metric = convergence_metric_type
+            except NameError:
+                var_metric = 'LinfNorm'
+        
+        if self.iterations >= 1:
+
+            for j in range(self.iterations):
+
+                if f_compute_convergence:
+                    last_iter_x = np.copy(self.x)
+                    last_iter_y = np.copy(self.y)
+
+                if self.kappa > 0: # TODO: Encontrar remplazo para IDL:interpolate
+                    vfx = None # interpolate.CubicSpline
+                    vfy = None # interpolate.CubicSpline
+
+                n_elem_inv_array = inv_array.shape[0]
+                n_elem_contour = len(self.x)
+
+                if n_elem_inv_array != n_elem_contour:
+                    
+                    npts_iter = n_elem_contour
+                    alpha = np.full(npts_iter, self.alpha)
+                    beta = np.full(npts_iter, self.beta)
+                    
+                    a = beta
+                    b = -alpha - 4*beta
+                    c = 2*alpha + 6*beta
+
+                    abc_matrix = np.diag(a[0:npts_iter-2], 2) + np.diag(a[npts_iter-2:npts_iter], -(npts_iter-2)) \
+                                + np.diag(b[0:npts_iter-1], 1) + np.diag(b[npts_iter-1], -(npts_iter-1)) \
+                                + np.diag(c + self.gamma) \
+                                + np.diag(b[0:npts_iter-1], -1) + np.diag(b[npts_iter-1], (npts_iter-1)) \
+                                + np.diag(a[0:npts_iter-2], -2) + np.diag(a[npts_iter-2:npts_iter], (npts_iter-2))
+
+                    inv_array = np.linalg.inv(abc_matrix)
+
+                if fix_point_count > 0: # TODO and ~keyword_set(fClose)
+
+                    x_tmp = np.matmul(inv_array, (self.gamma * self.x + self.kappa * vfx))
+                    y_tmp = np.matmul(inv_array, (self.gamma * self.y + self.kappa * vfy))
+
+                    if len(fix_point_indices) > 0:
+                        x_tmp[fix_point_indices] = self.x[fix_point_indices]
+                        y_tmp[fix_point_indices] = self.y[fix_point_indices]
+
+                        if f_compute_convergence:
+                            x_delta = np.abs(x_tmp - self.x)
+                            y_delta = np.abs(y_tmp - self.y)
+
+                        if perimeter_factor: # TODO keyword_set(perimeter_factor)
+                            pass # pendiente
+
         #llama función polygonPerimeter()
         #self -> arcSample (llama función arcSample)
         #matriz pentadiagonal -> scipy.sparse.diags
@@ -172,7 +327,7 @@ class ActiveContour:
         #calcNorm_L2ForVector
         #calcNorm_LInfiniteForVector
         #calcNorm_LInfiniteForVector
-        return
+        return [self.x, self.y]
 
     # Se asume un int en direction TODO: deberia poder admitir vectores?
     # TODO: este metodo puede ser estatico
