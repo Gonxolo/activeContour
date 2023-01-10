@@ -345,8 +345,8 @@ class ActiveContour:
                         y_fix_vec_1 = self.y[0 : fix_point_count]
                         y_fix_vec_2 = self.y[npts_iter - fix_point_count :]
 
-                        x_tmp_2 = np.array([x_fix_vec_1[:], x_tmp[1 : n_elem_contour - fix_point_count + 1], x_fix_vec_2[:]])
-                        y_tmp_2 = np.array([y_fix_vec_1[:], y_tmp[1 : n_elem_contour - fix_point_count + 1], y_fix_vec_2[:]])
+                        x_tmp_2 = np.concatenate((x_fix_vec_1, x_tmp[1 : n_elem_contour - fix_point_count + 1], x_fix_vec_2))
+                        y_tmp_2 = np.concatenate((y_fix_vec_1, y_tmp[1 : n_elem_contour - fix_point_count + 1], y_fix_vec_2))
 
                         if f_compute_convergence:
                             x_delta = np.abs(x_tmp_2 - self.x)
