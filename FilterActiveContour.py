@@ -16,7 +16,3 @@ def getpObjectBorderPolygonList() -> list:
 
 def convexHullPolygon(xCoords, yCoords) -> list:
     return
-
-def polygonParameter(xPolyCoords, yPolyCoords) -> float:
-    #en geometryFunctions, utilizada en adjustContour
-    return
