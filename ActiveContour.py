@@ -81,7 +81,7 @@ class ActiveContour:
         return self.y if bool(self.y) else -1
     
     def get_GGVF(self):
-        return [self.u, self.v] if bool(self.u) else -1
+        return np.array([self.u, self.v]) if bool(self.u) else -1
 
     def laplacian(self, image: np.ndarray) -> np.ndarray:
 
@@ -440,7 +440,7 @@ class ActiveContour:
                     print(msg)
                 convergence_metric_value = variation
 
-        return [self.x, self.y]
+        return np.array([self.x, self.y])
 
     # Se asume un int en direction TODO: deberia poder admitir vectores?
     # TODO: este metodo puede ser estatico
