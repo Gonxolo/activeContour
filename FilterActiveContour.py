@@ -33,7 +33,7 @@ l = np.array([1,2,3])
 s = np.array([0])
 sl = np.concatenate((np.array([4]),l), axis = None)
 #s = np.concatenate(0,l)
-print(sl)
+print("sl",sl)
 
 a = np.zeros(4)
 a[0]=1
