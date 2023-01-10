@@ -286,8 +286,9 @@ class ActiveContour:
                     last_iter_y = np.copy(self.y)
 
                 if self.kappa > 0: # TODO: Encontrar remplazo para IDL:interpolate
-                    vfx = None # interpolate.CubicSpline
-                    vfy = None # interpolate.CubicSpline
+                    cs = interpolate.CubicSpline(self.x, self.y)
+                    vfx = cs(self.u)
+                    vfy = cs(self.v)
 
                 n_elem_inv_array = inv_array.shape[0]
                 n_elem_contour = len(self.x)
