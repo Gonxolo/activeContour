@@ -358,7 +358,7 @@ class ActiveContour:
                             for k in range(len(self.x) - 1):
                                 poly_line_length += np.emath.sqrt(np.square(x_tmp_2[k+1] - x_tmp_2[k]) 
                                                     + np.square(y_tmp_2[k+1] - y_tmp_2[k]))
-                            npts_iter = np.max((round(poly_line_length) * np.max(perimeter_factor)))
+                            npts_iter = np.max((round(poly_line_length) * np.max(perimeter_factor, 0.1)), 5)
 
                         if not f_keep_point_count:
                             self.arcSample(points=npts_iter)
