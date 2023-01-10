@@ -74,6 +74,15 @@ class ActiveContour:
 
         pass
 
+    def get_x_coords(self):
+        return self.x if bool(self.x) else -1
+    
+    def get_y_coords(self):
+        return self.y if bool(self.y) else -1
+    
+    def get_GGVF(self):
+        return [self.u, self.v] if bool(self.u) else -1
+
     def laplacian(self, image: np.ndarray) -> np.ndarray:
 
         """
