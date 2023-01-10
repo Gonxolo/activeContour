@@ -325,7 +325,118 @@ class ActiveContour:
                             y_delta = np.abs(y_tmp - self.y)
 
                         if perimeter_factor: # TODO keyword_set(perimeter_factor)
-                            pass # pendiente
+                            poly_line_length = 0.0
+                            for k in range(len(x_tmp) - 1):
+                                poly_line_length += np.emath.sqrt(np.square(x_tmp[k+1] - x_tmp[k]) 
+                                                    + np.square(y_tmp[k+1] - y_tmp[k]))
+                            npts_iter = np.max((round(poly_line_length) * np.max(perimeter_factor, 0.1)), 5)
+
+                        if not f_keep_point_count: # TODO: ~keyword_set(f_point_count)
+                            self.arcSample(points=npts_iter)
+
+                        self.x = x_tmp
+                        self.y = y_tmp
+
+                    else:
+                        x_fix_vec_1 = self.x[0 : fix_point_count]
+                        x_fix_vec_2 = self.x[npts_iter - fix_point_count :]
+                        y_fix_vec_1 = self.y[0 : fix_point_count]
+                        y_fix_vec_2 = self.y[npts_iter - fix_point_count :]
+
+                        x_tmp_2 = np.array([x_fix_vec_1[:], x_tmp[1 : n_elem_contour - fix_point_count + 1], x_fix_vec_2[:]])
+                        y_tmp_2 = np.array([y_fix_vec_1[:], y_tmp[1 : n_elem_contour - fix_point_count + 1], y_fix_vec_2[:]])
+
+                        if f_compute_convergence:
+                            x_delta = np.abs(x_tmp_2 - self.x)
+                            y_delta = np.abs(y_tmp_2 - self.y)
+
+                        # Re-interpolate the snake points.
+                        if perimeter_factor: # TODO keyword_set(perimeter_factor)
+                            poly_line_length = 0.0
+                            for k in range(len(self.x) - 1):
+                                poly_line_length += np.emath.sqrt(np.square(x_tmp_2[k+1] - x_tmp_2[k]) 
+                                                    + np.square(y_tmp_2[k+1] - y_tmp_2[k]))
+                            npts_iter = np.max((round(poly_line_length) * np.max(perimeter_factor)))
+
+                        if not f_keep_point_count:
+                            self.arcSample(points=npts_iter)
+                        
+                        # Put back the fixed points
+                        x_tmp_2[0:fix_point_count] = x_fix_vec_1
+                        x_tmp_2[npts_iter - fix_point_count + 1 :] = x_fix_vec_2
+                        y_tmp_2[0:fix_point_count] = y_fix_vec_1
+                        y_tmp_2[npts_iter - fix_point_count + 1 :] = y_fix_vec_2
+
+                        self.x = x_tmp_2
+                        self.y = y_tmp_2
+
+                else: # Non-fixed points, i.e. all the contour pointscan be displaced
+
+                    if f_compute_convergence:
+                        x_tmp_3 = np.matmul(inv_array, (self.gamma * self.x + self.kappa * vfx))
+                        y_tmp_3 = np.matmul(inv_array, (self.gamma * self.y + self.kappa * vfy))
+                        x_delta = np.abs(x_tmp_3 - self.x)
+                        y_delta = np.abs(y_tmp_3 - self.y)
+                        self.x = x_tmp_3
+                        self.y = y_tmp_3
+                    
+                    else:
+                        self.x = np.matmul(inv_array, (self.gamma * self.x + self.kappa * vfx))
+                        self.y = np.matmul(inv_array, (self.gamma * self.y + self.kappa * vfy))
+                    
+                    # Re-interpolate the snake points.
+                    if perimeter_factor: # TODO: keyword_set(perimeter_factor)
+                        npts_iter = np.max((round(polygon_perimeter(self.x, self.y) * np.max(perimeter_factor, 0.1))), 5)
+                    
+                    f_close = 1
+
+                    if not f_keep_point_count: # TODO: ~keyword_set(f_keep_point_count)
+                        self.arcSample(points=npts_iter-1 if f_close else npts_iter, f_close=f_close)
+                
+                if plot_contour > 0:
+                    if j == 1: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, linestyle = 1, thick = 3
+                    elif j == self.iterations: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, thick = 3
+                    else: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = (255 - (self.iterations - j) * 30) > 100
+            
+                if f_compute_convergence:
+                    delta_mag = np.sqrt(np.square(x_delta) + np.square(y_delta))
+
+                    if var_metric == 'Hausdorff': variation = None # TODO: s_HausdorffDistanceFor2Dpoints(*self.pX, *self.pY, lastIterX, lastIterY)
+                    elif var_metric == 'L1norm'   : variation = None # TODO: calcNorm_L1ForVector(deltaMag)
+                    elif var_metric == 'L2norm'   : variation = None # TODO: calcNorm_L2ForVector(deltaMag)
+                    elif var_metric == 'LinfNorm' : variation = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
+                    elif var_metric == 'average'  : variation = None # TODO: mean(deltaMag)
+                    elif var_metric == 'avgFracPerimeter': variation = None # TODO: mean(deltaMag) / polygonPerimeter(*self.pX, *self.pY)
+                    elif var_metric == 'avgFracPerimeter0': variation = None # TODO: mean(deltaMag) / perimeterIt0
+                    else: variation = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
+
+                    f_log = 0
+                    f_log_all = 0
+
+                    if f_log:
+                        log_file_path = 'D:\\tmp\\snakeLog.txt'
+                        msg = f"{var_metric} convergence criterion value = {variation} at iteration {j}"
+                        if f_log_all:
+                            hd = None # TODO: s_HausdorffDistanceFor2Dpoints(*self.pX, *self.pY, lastIterX, lastIterY)
+                            l1 = None # TODO: calcNorm_L1ForVector(deltaMag)
+                            l2 = None # TODO: calcNorm_L2ForVector(deltaMag)
+                            li = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
+                            avg = None # TODO: mean(deltaMag)
+                            avg_norm_perim_it = None # TODO: mean(deltaMag) / polygonPerimeter(*self.pX, *self.pY)
+                            avg_norm_perim_0  = None # TODO: mean(deltaMag) / perimeterIt0
+                            msg = ";".join(list(map(str, [hd, l1, l2, li, avg, avg_norm_perim_it, avg_norm_perim_0, j])))
+                        # TODO: file_logger(msg, log_file_path)
+                    
+                    if f_use_convergence_threshold:
+                        if variation <= convergence_thresh:
+                            break
+            
+            if f_compute_convergence:
+                if f_log_all:
+                    print('Hausdorff', ' L1norm', ' L2norm', ' LinfNorm', ' average', ' avgFracPerimeter', ' avgFracPerimeter0', ' Iteration')
+                elif f_log:
+                    print(msg)
+                convergence_metric_value = variation
 
         #llama función polygonPerimeter()
         #self -> arcSample (llama función arcSample)
