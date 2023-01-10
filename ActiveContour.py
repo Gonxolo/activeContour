@@ -153,7 +153,7 @@ class ActiveContour:
         """
         self.x = np.array(x)
         self.y = np.array(y)
-        self.npts = np.copy(self.x)
+        self.npts = len(self.x)
         return
 
     # TODO:
