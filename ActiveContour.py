@@ -248,7 +248,7 @@ class ActiveContour:
         if npts_iter != self.npts: # TODO: and ~keyword_set(fKeepPointCount)
             self.arcSample(points=npts_iter, f_close=f_close)
 
-        perimeter_it0 = polygon_perimeter(self.x, self.y)
+        perimeter_it_0 = polygon_perimeter(self.x, self.y)
 
         alpha = np.full(npts_iter, self.alpha)
         beta = np.full(npts_iter, self.beta)
@@ -311,6 +311,7 @@ class ActiveContour:
 
                     inv_array = np.linalg.inv(abc_matrix)
 
+                # Deform the snake.
                 if fix_point_count > 0: # TODO and ~keyword_set(fClose)
 
                     x_tmp = np.matmul(inv_array, (self.gamma * self.x + self.kappa * vfx))
@@ -324,6 +325,7 @@ class ActiveContour:
                             x_delta = np.abs(x_tmp - self.x)
                             y_delta = np.abs(y_tmp - self.y)
 
+                        # Re-interpolate the snake points.
                         if perimeter_factor: # TODO keyword_set(perimeter_factor)
                             poly_line_length = 0.0
                             for k in range(len(x_tmp) - 1):
@@ -438,16 +440,6 @@ class ActiveContour:
                     print(msg)
                 convergence_metric_value = variation
 
-        #llama función polygonPerimeter()
-        #self -> arcSample (llama función arcSample)
-        #matriz pentadiagonal -> scipy.sparse.diags
-        #invierte matriz con numpy.linalg.inv(A) (usa descompos. LU) (status ?)
-        #interpolation -> cubic convolution interpolation method
-        #s_HausdorffDistanceFor2Dpoints -> scipy.spatial.distance.directed_hausdorff
-        #calcNorm_L1ForVector
-        #calcNorm_L2ForVector
-        #calcNorm_LInfiniteForVector
-        #calcNorm_LInfiniteForVector
         return [self.x, self.y]
 
     # Se asume un int en direction TODO: deberia poder admitir vectores?
