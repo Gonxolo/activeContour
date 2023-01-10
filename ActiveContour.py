@@ -124,13 +124,29 @@ class ActiveContour:
         #revisar plt.streamploat
         return
 
+    def getCoords(self, xyRes = np.array([1.,1.])) -> None:
+        """It grerturns the coordinates x and y of the image.
+
+        Parameters
+        ----------
+        xyRes : np.ndarray of floats, optional
+            Resolution of the image, by default np.array([1.,1.])
+
+        Returns
+        -------
+        np.ndarray
+            Coordinates x and y of the image
+             note:: in case xCoords is an invalid value, it returns -1.
+        """
+        return np.array([xyRes[0] * self.xCoords, xyRes[1] * self.yCoords])
+
     # TODO: Setear las [x, y] coordenadas para el contorno activo
     def setContour(self) -> None:
         return
 
     # TODO:
     def getPerimeter(self,xyRes = np.array([1.,1.])) -> float:
-        """The function calculates the perimeter of a contour.
+        """This method calculates the perimeter of a contour.
 
         Parameters:
         -----------
@@ -141,13 +157,13 @@ class ActiveContour:
         -------
         float
             Value of the perimeter of a contour.
-            Obs: in case xCoords is an invalid value, it returns -1.
+            note:: in case xCoords is an invalid value, it returns -1.
         """
         p = self.getDistance(self, xyRes)
         return np.sum(p)
     
     def getDistance(self, xyRes = np.array([1.,1.])) -> np.ndarray:
-        """The function calculates the distance between consecutive points.
+        """This method calculates the distance between consecutive points.
         
         Parameters:
         -----------
@@ -158,7 +174,7 @@ class ActiveContour:
         -------
         np.ndarray
             Array of floats with the euclidean distance between the consecutive points of a segment.
-            Obs: in case xCoords is an invalid value, it returns -1.
+            note:: in case xCoords is an invalid value, it returns -1.
         """
         dx = np.square(np.roll(self.xCoords, -1) - self.xCoords * xyRes[0])
         dy = np.square(np.roll(self.yCoords, -1) - self.yCoords * xyRes[1])
@@ -175,7 +191,7 @@ class ActiveContour:
         f_close : _type_, optional
             Set this keyword to True to specify the contour curve, by default None.
         """
-        #if size(*self.pX,/n_dimensions) eq 2 then begin, x_in = reform(*self.pX) ...
+        #if size(*self.pX,/n_dimensions) eq 2 then begin, x_in = reform(*self.pX) ... ya lo hace python
         x_in = np.copy(self.xCoords)
         y_in = np.copy(self.yCoords)
 
@@ -234,13 +250,13 @@ class ActiveContour:
         if f_close:
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.xCoords = np.concatenate((x_out, np.array(x_out[0])), axis = None)
-            self.yCoords = np.concatenate((y_out, np.array(y_out[0])), axis = None)
+            self.xCoords = np.concatenate((x_out, np.array([x_out[0]])), axis = None)
+            self.yCoords = np.concatenate((y_out, np.array([y_out[0]])), axis = None)
         else:
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.xCoords = np.concatenate((x_out, np.array(x_in[npts - 1])), axis = None)
-            self.yCoords = np.concatenate((y_out, np.array(y_in[npts - 1])), axis = None)
+            self.xCoords = np.concatenate((x_out, np.array([x_in[npts - 1]])), axis = None)
+            self.yCoords = np.concatenate((y_out, np.array([y_in[npts - 1]])), axis = None)
         
         self.npts = len(self.xCoords)
         
