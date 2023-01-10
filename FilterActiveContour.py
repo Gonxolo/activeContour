@@ -18,10 +18,6 @@ def getpObjectBorderPolygonList() -> list:
 def convexHullPolygon(xCoords, yCoords) -> list:
     return
 
-def polygonParameter(xPolyCoords, yPolyCoords) -> float:
-    #en geometryFunctions, utilizada en adjustContour
-    return
-
 x = (np.arange(21)/20)*2*np.pi
 y = np.sin(x)
 cs = CubicSpline(x,y)
@@ -57,5 +53,4 @@ print("p3", p[1:]) #[1,2,3,4] en python y en IDL
 
 x_out = np.array([1,2,3])
 print("l",np.concatenate((x_out, np.array([x_out[0]]))))
-
 
