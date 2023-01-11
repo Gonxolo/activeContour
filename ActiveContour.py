@@ -156,7 +156,7 @@ class ActiveContour:
             Coordinates x and y of the image
              note:: in case xCoords is an invalid value, it returns -1.
         """
-        return np.array([xyRes[0] * self.xCoords, xyRes[1] * self.yCoords])
+        return np.array([xyRes[0] * self.x, xyRes[1] * self.y])
 
     def setContour(self, x: list, y: list) -> None:
         """Set the [x, y] coordinates for the active contour.
@@ -211,7 +211,7 @@ class ActiveContour:
 
     # TODO:
     def arcSample(self, points = 50, f_close = None) -> None:
-        """It takes a closed curve and re-samples it in equal arc lenghts.
+        """It takes a closed curve and re-samples it in equal arc lengths.
 
         Parameters
         ----------
@@ -221,8 +221,8 @@ class ActiveContour:
             Set this keyword to True to specify the contour curve, by default None.
         """
         #if size(*self.pX,/n_dimensions) eq 2 then begin, x_in = reform(*self.pX) ... ya lo hace python
-        x_in = np.copy(self.xCoords)
-        y_in = np.copy(self.yCoords)
+        x_in = np.copy(self.x)
+        y_in = np.copy(self.y)
 
         npts = len(x_in)
         #Make sure the curve is closed (first point same as last point).
