@@ -1,5 +1,5 @@
 import unittest
-import ActiveContour
+from ActiveContour import ActiveContour
 
 class TestActiveContour(unittest.TestCase):
     def setUp(self) -> None:
