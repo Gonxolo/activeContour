@@ -47,7 +47,32 @@ class TestActiveContour(unittest.TestCase):
         self.assertTrue(self.activeContour.npts >= 0)
 
     #parab hacer varios asserts en una fun test se usa self.subTest():self.assertBKJa
-    def test_laplacian():
+    def test_laplacian(self):
+        
+        """
+        Basic laplacian test comparing the convolution array obtained in IDL vs.
+        the one calculated by laplacian in Python
+        """
+
+        ex_image = np.identity(5)
+
+        expected_convolution = np.array([
+            [-0.50000021,   0.33333319,   0.24999990,   0.00000000,   0.00000000],
+            [ 0.33333319,  -0.83333340,   0.16666660,   0.24999990,   0.00000000],
+            [ 0.24999990,   0.16666660,  -0.83333340,   0.16666660,   0.24999990],
+            [ 0.00000000,   0.24999990,   0.16666660,  -0.83333340,   0.33333319],
+            [ 0.00000000,   0.00000000,   0.24999990,   0.33333319,  -0.50000021]
+        ])
+
+        calculated_convolution = self.activeContour.laplacian(ex_image)
+
+        self.assertTrue(np.allclose(expected_convolution, calculated_convolution))
+
+    def test_gradient(self):
+        
+        pass
+
+    def test_edgeMap(self):
         pass
     
     def test_calcGGVF():
