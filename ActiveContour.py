@@ -278,8 +278,8 @@ class ActiveContour:
         if bool(f_close):
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.xCoords = np.concatenate((x_out, np.array([x_out[0]])), axis = None)
-            self.yCoords = np.concatenate((y_out, np.array([y_out[0]])), axis = None)
+            self.x = np.concatenate((x_out, np.array([x_out[0]])), axis = None)
+            self.y = np.concatenate((y_out, np.array([y_out[0]])), axis = None)
         else:
             x_out = dx1(tx)
             y_out = dy1(tx)
