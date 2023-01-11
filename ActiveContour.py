@@ -71,7 +71,7 @@ class ActiveContour:
 
         # Calcular npts igual a largo de X o 0 si es None/si es invalido
 
-        self.npts = self.x if self.x is not None else 0
+        self.npts = len(self.x) if self.x is not None else 0
 
         pass
 
