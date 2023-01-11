@@ -142,7 +142,7 @@ class ActiveContour:
         #revisar plt.streamploat
         return
 
-    def getCoords(self, xyRes = np.array([1.,1.])) -> None:
+    def getCoords(self, xyRes = np.array([1.,1.])) -> np.ndarray:
         """It returns the coordinates x and y of the image.
 
         Parameters
