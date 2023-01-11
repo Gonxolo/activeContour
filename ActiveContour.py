@@ -143,7 +143,7 @@ class ActiveContour:
         return
 
     def getCoords(self, xyRes = np.array([1.,1.])) -> None:
-        """It grerturns the coordinates x and y of the image.
+        """It returns the coordinates x and y of the image.
 
         Parameters
         ----------
@@ -225,9 +225,9 @@ class ActiveContour:
         y_in = np.copy(self.y)
 
         npts = len(x_in)
+        
         #Make sure the curve is closed (first point same as last point).
-        f_close = bool(f_close)
-        if f_close:
+        if bool(f_close):
             if (x_in[0] != x_in[npts - 1]) or (y_in[0] != y_in[npts - 1]):
                 x_in = np.concatenate((x_in, np.array([x_in[0]])))
                 y_in = np.concatenate((y_in, np.array([y_in[0]])))
@@ -246,7 +246,7 @@ class ActiveContour:
         csy = CubicSpline(t, y_in)
         y1 = csy(t1)
 
-        if f_close:
+        if bool(f_close):
             #computes the boundary condition for the cubic spline: derivatives at the beggining and end points are the same
             avg_slopeX = (x1[1] - x1[0] + x1[nc] - x1[nc - 1]) / (t1[1] - t1[0]) * 0.5
             avg_slopeY = (y1[1] - y1[0] + y1[nc] - y1[nc - 1]) / (t1[1] - t1[0]) * 0.5
@@ -267,8 +267,7 @@ class ActiveContour:
 
         #compute cumulative path length.
         ds = np.sqrt(np.square((x1[1:] - x1)) + np.square((y1[1:] - y1)))
-        s1 = np.cumsum(ds)
-        ss = np.concatenate((np.array([0]), s1), axis = None)
+        ss = np.concatenate((np.array([0]), np.cumsum(ds)), axis = None)
 
         #Invert this curve, solve for TX, which should be evenly sampled in the arc length space.
         sx = np.arange(points) * (ss[nc] / points)
@@ -276,7 +275,7 @@ class ActiveContour:
         tx = cstx(sx)
 
         #Reinterpolate the original points using the new values of TX and optionally close the contour.
-        if f_close:
+        if bool(f_close):
             x_out = dx1(tx)
             y_out = dy1(tx)
             self.xCoords = np.concatenate((x_out, np.array([x_out[0]])), axis = None)
