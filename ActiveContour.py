@@ -77,13 +77,37 @@ class ActiveContour:
         pass
 
     def get_x_coords(self):
-        return self.x if bool(self.x) else -1
+        try:
+            if len(self.x) <= 0:
+                return -1
+            self.x = np.array(self.x, dtype=np.float64)
+            return self.x
+        except ValueError:
+            return  -1
     
     def get_y_coords(self):
-        return self.y if bool(self.y) else -1
+        try:
+            if len(self.y) <= 0:
+                return -1
+            self.y = np.array(self.y, dtype=np.float64)
+            return self.y
+        except ValueError:
+            return  -1
     
     def get_GGVF(self):
-        return np.array([self.u, self.v]) if bool(self.u) else -1
+        try:
+            if len(self.u) <= 0:
+                return -1
+
+            if len(self.v) <= 0:
+                return -1
+
+            self.u = np.array(self.u, dtype=np.float64)
+            self.v = np.array(self.v, dtype=np.float64)
+            return np.array([self.u, self.v], dtype=np.float64)
+            
+        except ValueError:
+            return  -1
 
     def laplacian(self, image: np.ndarray) -> np.ndarray:
 
