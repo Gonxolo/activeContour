@@ -44,9 +44,9 @@ class ActiveContour:
         """
         #para asegurar tipo de arrays, poner el tipo (d_type=float64? o double)
 
-        self.image = np.array(image)
-        self.x = np.array(x_coords)
-        self.y = np.array(y_coords)
+        self.image = np.array(image, dtype=np.float64)
+        self.x = np.array(x_coords, dtype=np.float64)
+        self.y = np.array(y_coords, dtype=np.float64)
         self.alpha = max(alpha, 0.001)
         self.beta = max(beta, 0.001)
         self.gamma = max(gamma, 0.1)
@@ -159,7 +159,6 @@ class ActiveContour:
             # Optimized iteration scheme
             self.u = g * (self.u + u_lap) + c1
             self.v = g * (self.v + v_lap) + c2
-
         return
 
     # TODO: Plotear el campo GVF
@@ -167,7 +166,7 @@ class ActiveContour:
         #revisar plt.streamploat
         return
 
-    def getCoords(self, xyRes = np.array([1.,1.])) -> np.ndarray:
+    def getCoords(self, xyRes = np.array([1.,1.], dtype=np.float64)) -> np.ndarray:
         """It returns the coordinates x and y of the image.
 
         Parameters
@@ -181,7 +180,7 @@ class ActiveContour:
             Coordinates x and y of the image
              note:: in case xCoords is an invalid value, it returns -1.
         """
-        return np.array([xyRes[0] * self.x, xyRes[1] * self.y])
+        return np.array([xyRes[0] * self.x, xyRes[1] * self.y], dtype=np.float64)
 
     def setContour(self, x: list, y: list) -> None:
         """Set the [x, y] coordinates for the active contour.
@@ -193,13 +192,13 @@ class ActiveContour:
         y : list
             `y` coordinate array of the contour to be set.
         """
-        self.x = np.array(x)
-        self.y = np.array(y)
+        self.x = np.array(x, dtype=np.float64)
+        self.y = np.array(y, dtype=np.float64)
         self.npts = len(self.x)
         return
 
     # TODO:
-    def getPerimeter(self,xyRes = np.array([1.,1.])) -> float:
+    def getPerimeter(self,xyRes = np.array([1.,1.], dtype=np.float64)) -> float:
         """This method calculates the perimeter of a contour.
 
         Parameters:
@@ -216,7 +215,7 @@ class ActiveContour:
         p = self.getDistance(xyRes)
         return np.sum(p)
     
-    def getDistance(self, xyRes = np.array([1.,1.])) -> np.ndarray:
+    def getDistance(self, xyRes = np.array([1.,1.], dtype=np.float64)) -> np.ndarray:
         """This method calculates the distance between consecutive points.
         
         Parameters:
@@ -254,8 +253,8 @@ class ActiveContour:
         #Make sure the curve is closed (first point same as last point).
         if bool(f_close):
             if (x_in[0] != x_in[npts - 1]) or (y_in[0] != y_in[npts - 1]):
-                x_in = np.concatenate((x_in, np.array([x_in[0]])))
-                y_in = np.concatenate((y_in, np.array([y_in[0]])))
+                x_in = np.concatenate((x_in, np.array([x_in[0]], dtype=np.float64)))
+                y_in = np.concatenate((y_in, np.array([y_in[0]], dtype=np.float64)))
                 # print, "Active contour interpolation warning: adding 1 point to close the contour,
                 # according to the specified input"
                 npts += 1
@@ -292,7 +291,7 @@ class ActiveContour:
 
         #compute cumulative path length.
         ds = np.sqrt(np.square((x1[1:] - x1)) + np.square((y1[1:] - y1)))
-        ss = np.concatenate((np.array([0]), np.cumsum(ds)), axis = None)
+        ss = np.concatenate((np.array([0], dtype=np.float64), np.cumsum(ds)), axis = None)
 
         #Invert this curve, solve for TX, which should be evenly sampled in the arc length space.
         sx = np.arange(points) * (ss[nc] / points)
@@ -303,13 +302,13 @@ class ActiveContour:
         if bool(f_close):
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.x = np.concatenate((x_out, np.array([x_out[0]])), axis = None)
-            self.y = np.concatenate((y_out, np.array([y_out[0]])), axis = None)
+            self.x = np.concatenate((x_out, np.array([x_out[0]], dtype=np.float64)), axis = None)
+            self.y = np.concatenate((y_out, np.array([y_out[0]], dtype=np.float64)), axis = None)
         else:
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.xCoords = np.concatenate((x_out, np.array([x_in[npts - 1]])), axis = None)
-            self.yCoords = np.concatenate((y_out, np.array([y_in[npts - 1]])), axis = None)
+            self.xCoords = np.concatenate((x_out, np.array([x_in[npts - 1]], dtype=np.float64)), axis = None)
+            self.yCoords = np.concatenate((y_out, np.array([y_in[npts - 1]], dtype=np.float64)), axis = None)
         
         self.npts = len(self.xCoords)
         
@@ -565,7 +564,7 @@ class ActiveContour:
                     print(msg)
                 convergence_metric_value = variation
 
-        return np.array([self.x, self.y])
+        return np.array([self.x, self.y], dtype=np.float64)
 
     # Se asume un int en direction TODO: deberia poder admitir vectores?
     # TODO: este metodo puede ser estatico
@@ -595,7 +594,7 @@ class ActiveContour:
         else:
             return -1 # Reemplazar este valor por algo mas indicativo. Una excepcion si solo se recibe direccion {0, 1}
 
-        return theGradient
+        return np.array(theGradient, dtype=np.float64)
 
     def edgeMap(self) -> None:
 
@@ -604,7 +603,7 @@ class ActiveContour:
         max_val = np.max(edge_map)
 
         if max_val != min_val:
-            edge_map = np.array([(i - min_val)/(max_val - min_val) for i in edge_map])
+            edge_map = np.array([(i - min_val)/(max_val - min_val) for i in edge_map], dtype=np.float64)
 
         self.u = self.gradient(edge_map, 0)
         self.v = self.gradient(edge_map, 1)
