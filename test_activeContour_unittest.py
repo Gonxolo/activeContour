@@ -108,10 +108,43 @@ class TestActiveContour(unittest.TestCase):
         obtained_error = self.activeContour.gradient(test_matrix, 2)
         self.assertEqual(expected_error, obtained_error)
 
-        pass
 
     def test_edgeMap(self):
-        pass
+
+        test_matrix = [
+            [-0.836854,  -0.172280,   0.187117,   1.61544,   -0.176774],
+            [ 0.653145,  -0.546364,   0.194146,   0.925709,   1.20432],
+            [ 1.53055,   -1.35556,    0.0514889,  1.02018,   -1.22616],
+            [ 0.708497,   0.871673,  -0.789721,   0.332079,   0.205603],
+            [-0.169367,  -0.318417,  -0.295643,   0.522291,  -2.23105]
+        ]
+
+        # edgeMap operates over the image parameter in activeContour
+        self.activeContour.image = test_matrix
+
+        self.activeContour.edgeMap()
+
+        expected_u = [
+            [-0.20294272,     -0.20294272,   -0.22375031,   -0.17602059,     -0.17602059],
+            [-0.24078942,     -0.24078942,   -0.024944522,  -0.0056031423,   -0.0056031423],
+            [ 0.28159152,      0.28159152,   -0.16518826,   -0.24506052,     -0.24506052],
+            [-0.41912083,     -0.41912083,   -0.18301274,    0.19939879,      0.19939879],
+            [-0.20514606,     -0.20514606,    0.24606335,    0.32800322,      0.32800322]
+        ]
+        expected_v = [
+            [-0.28364461,     0.12493585,     0.20088962,     0.18349790,    0.13184969],
+            [-0.28364461,     0.12493585,     0.20088962,     0.18349790,    0.13184969],
+            [-0.037562439,    0.14268830,    -0.21589385,    -0.015379923,  -0.010891916],
+            [ 0.057928947,   -0.25911694,    -0.42880863,     0.15213467,    0.14425511],
+            [ 0.057928947,   -0.25911694,    -0.42880863,     0.15213467,    0.14425511]
+        ]
+
+        obtained_u = self.activeContour.u
+        obtained_v = self.activeContour.v
+        
+        self.assertTrue(np.allclose(expected_u, obtained_u))
+        self.assertTrue(np.allclose(expected_v, obtained_v))
+
     
     def test_calcGGVF(self):
         pass
