@@ -147,7 +147,64 @@ class TestActiveContour(unittest.TestCase):
 
     
     def test_calcGGVF(self):
-        pass
+
+        test_matrix = [
+            [-0.836854,  -0.172280,   0.187117,   1.61544,   -0.176774],
+            [ 0.653145,  -0.546364,   0.194146,   0.925709,   1.20432],
+            [ 1.53055,   -1.35556,    0.0514889,  1.02018,   -1.22616],
+            [ 0.708497,   0.871673,  -0.789721,   0.332079,   0.205603],
+            [-0.169367,  -0.318417,  -0.295643,   0.522291,  -2.23105]
+        ]
+
+        # edgeMap operates over the image parameter in activeContour
+        self.activeContour.image = test_matrix
+
+        self.activeContour.gvf_iterations = 30
+        self.activeContour.mu = 0.25
+
+        self.activeContour.calcGGVF()
+
+        expected_u = [
+            [-0.19888015,     -0.19051523,     -0.21328954,     -0.17007296,     -0.16678564],
+            [-0.22533313,     -0.21492307,    -0.069503441,    -0.059182901,    -0.061994284],
+            [ 0.16040234,      0.20230814,     -0.14182237,     -0.16331192,     -0.16201230],
+            [-0.37913884,     -0.39737244,     -0.16747069,      0.15865931,      0.17054295],
+            [-0.19488824,     -0.18525131,      0.23100745,      0.30214295,      0.31290017]
+        ]
+        expected_v = [
+            [-0.26007422,     0.090908136,   0.17828062,    0.17093918,    0.13137188],
+            [-0.25864705,     0.085847438,   0.12721763,    0.13828413,    0.11447035],
+            [-0.051232137,    0.10007335,   -0.17521568,    0.0036853191,  0.018308106],
+            [ 0.036271498,   -0.24825132,   -0.39794455,    0.10567059,    0.12099263],
+            [ 0.0060995944,  -0.24035929,   -0.40910713,    0.12275513,    0.13339623]
+        ]        
+
+        obtained_u = self.activeContour.u
+        obtained_v = self.activeContour.v
+
+        self.assertTrue(np.allclose(expected_u, obtained_u))
+        self.assertTrue(np.allclose(expected_v, obtained_v))
+
+    def test_setContour(self):
+
+        test_matrix = [
+            [-0.836854,  -0.172280,   0.187117,   1.61544,   -0.176774],
+            [ 0.653145,  -0.546364,   0.194146,   0.925709,   1.20432]
+        ]
+
+        self.activeContour.setContour(test_matrix[0], test_matrix[1])
+
+        expected_x = test_matrix[0]
+        expected_y = test_matrix[1]
+        expected_npts = len(expected_x)
+        
+        obtained_x = self.activeContour.x
+        obtained_y = self.activeContour.y
+        obtained_npts = self.activeContour.npts
+
+        self.assertTrue(np.array_equal(expected_x, obtained_x))
+        self.assertTrue(np.array_equal(expected_y, obtained_y))
+        self.assertTrue(expected_npts, obtained_npts)
 
     def test_plotGVF(self):
         pass
