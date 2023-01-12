@@ -35,3 +35,48 @@ def polygon_perimeter(x: list, y: list, xyFactor: list = [1.0, 1.0]) -> np.ndarr
     
     return np.sum(np.sqrt(np.square((np.roll(x, -1) - x) * xyFactor[0]) + 
                             np.square((np.roll(y, -1) - y) * xyFactor[1])))
+
+def calcNorm_L1ForVector(vec):
+    """Computes the L1-norm for a vector of n components.
+
+    Parameters
+    ----------
+    vec : np.ndarray
+        vector
+
+    Returns
+    -------
+    float
+        Value of the L1-norm for a vector of n components.
+    """
+    return np.sum(np.abs(vec))
+
+def calcNorm_L2ForVector(vec):
+    """Computes the L2-norm for a vector of n components.
+
+    Parameters
+    ----------
+    vec : np.ndarray
+        vector
+
+    Returns
+    -------
+    float
+        Value of the L2-norm for a vector of n components.
+    """
+    return np.sqrt(np.sum(np.square(vec)))
+
+def calcNorm_LInfiniteForVector(vec):
+    """Computes the L-infinity-norm for a vector of n components.
+
+    Parameters
+    ----------
+    vec : np.ndarray
+        vector
+
+    Returns
+    -------
+    float
+        Value of the L-infinity-norm for a vector of n components.
+    """
+    return np.amax(np.abs(vec))
