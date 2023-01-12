@@ -54,3 +54,11 @@ print("p3", p[1:]) #[1,2,3,4] en python y en IDL
 x_out = np.array([1,2,3])
 print("l",np.concatenate((x_out, np.array([x_out[0]]))))
 
+x1=[0,1,2,3,4]
+y1=[2,3,5,6,7]
+dx = np.square(np.roll(x1,-1)-x1)
+dy = np.square(np.roll(y1,-1)-y1)
+res=np.power(dx + dy, 0.5)
+per=np.sum(res)
+print("res",res)
+print("per",per)

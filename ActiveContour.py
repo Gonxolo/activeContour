@@ -9,7 +9,7 @@ from scipy.interpolate import CubicSpline
 class ActiveContour:
 
     # TODO: Aqui recibimos los parametros para inicializar el algoritmo
-    def __init__(self, image: list[list], x_coords: list[int], y_coords: list[int], alpha: float = 0.1, beta: float = 0.25,
+    def __init__(self, image: list, x_coords: list, y_coords: list, alpha: float = 0.1, beta: float = 0.25,
                  gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, gvf_iterations: int = 100,
                  iterations: int = 200) -> None:
 
@@ -42,17 +42,18 @@ class ActiveContour:
 
         :param iterations: The number of iterations to use in calculating the snake positions. Default: 200.
         """
+        #para asegurar tipo de arrays, poner el tipo (d_type=float64? o double)
 
         self.image = np.array(image)
         self.x = np.array(x_coords)
         self.y = np.array(y_coords)
-        self.alpha = np.max(alpha, 0.001)
-        self.beta = np.max(beta, 0.001)
-        self.gamma = np.max(gamma, 0.1)
-        self.kappa = np.max(kappa, 0.0)
-        self.mu = np.max(min(mu, 0.25), 0.001)
-        self.gvf_iterations = np.max(gvf_iterations, 1)
-        self.iterations = np.max(iterations, 1)
+        self.alpha = max(alpha, 0.001)
+        self.beta = max(beta, 0.001)
+        self.gamma = max(gamma, 0.1)
+        self.kappa = max(kappa, 0.0)
+        self.mu = max(min(mu, 0.25), 0.001)
+        self.gvf_iterations = max(gvf_iterations, 1)
+        self.iterations = max(iterations, 1)
 
         # pU (edgeMap)
         # pV (edgeMap)
@@ -156,7 +157,7 @@ class ActiveContour:
             Coordinates x and y of the image
              note:: in case xCoords is an invalid value, it returns -1.
         """
-        return np.array([xyRes[0] * self.xCoords, xyRes[1] * self.yCoords])
+        return np.array([xyRes[0] * self.x, xyRes[1] * self.y])
 
     def setContour(self, x: list, y: list) -> None:
         """Set the [x, y] coordinates for the active contour.
@@ -188,7 +189,7 @@ class ActiveContour:
             Value of the perimeter of a contour.
             note:: in case xCoords is an invalid value, it returns -1.
         """
-        p = self.getDistance(self, xyRes)
+        p = self.getDistance(xyRes)
         return np.sum(p)
     
     def getDistance(self, xyRes = np.array([1.,1.])) -> np.ndarray:
@@ -205,13 +206,13 @@ class ActiveContour:
             Array of floats with the euclidean distance between the consecutive points of a segment.
             note:: in case xCoords is an invalid value, it returns -1.
         """
-        dx = np.square(np.roll(self.x,-1)-self.x*xyRes[0])
-        dy = np.square(np.roll(self.y,-1)-self.y*xyRes[1])
+        dx = np.square((np.roll(self.x,-1)-self.x)*xyRes[0])
+        dy = np.square((np.roll(self.y,-1)-self.y)*xyRes[1])
         return np.power(dx + dy, 0.5)
 
     # TODO:
     def arcSample(self, points = 50, f_close = None) -> None:
-        """It takes a closed curve and re-samples it in equal arc lenghts.
+        """It takes a closed curve and re-samples it in equal arc lengths.
 
         Parameters
         ----------
@@ -221,8 +222,8 @@ class ActiveContour:
             Set this keyword to True to specify the contour curve, by default None.
         """
         #if size(*self.pX,/n_dimensions) eq 2 then begin, x_in = reform(*self.pX) ... ya lo hace python
-        x_in = np.copy(self.xCoords)
-        y_in = np.copy(self.yCoords)
+        x_in = np.copy(self.x)
+        y_in = np.copy(self.y)
 
         npts = len(x_in)
         
