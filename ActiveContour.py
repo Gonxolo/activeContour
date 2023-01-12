@@ -118,8 +118,8 @@ class ActiveContour:
         # This pair of functions act as an "enhancer/de-enhancer" of high gradient neighbors the choice of the functions
         # must satisfy some convergence restrictions (see reference) TODO: agregar referencia
         g = np.exp(-b / self.mu)
-        c1 = self.u * (np.ones(g.shape[0]) - g)
-        c2 = self.v * (np.ones(g.shape[0]) - g)
+        c1 = self.u * (np.ones(g.shape) - g)
+        c2 = self.v * (np.ones(g.shape) - g)
 
         # Solve iteratively for the GGVF [u, v]
         # delta_x = delta_y = delta_t = 1
