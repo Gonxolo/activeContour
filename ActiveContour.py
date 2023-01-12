@@ -72,7 +72,7 @@ class ActiveContour:
 
         # Calcular npts igual a largo de X o 0 si es None/si es invalido
 
-        self.npts = self.x if self.x is not None else 0
+        self.npts = len(self.x) if self.x is not None else 0
 
         pass
 
@@ -119,12 +119,12 @@ class ActiveContour:
         # This pair of functions act as an "enhancer/de-enhancer" of high gradient neighbors the choice of the functions
         # must satisfy some convergence restrictions (see reference) TODO: agregar referencia
         g = np.exp(-b / self.mu)
-        c1 = self.u * (np.ones(g.shape[0]) - g)
-        c2 = self.v * (np.ones(g.shape[0]) - g)
+        c1 = self.u * (np.ones(g.shape) - g)
+        c2 = self.v * (np.ones(g.shape) - g)
 
         # Solve iteratively for the GGVF [u, v]
         # delta_x = delta_y = delta_t = 1
-        for j in range(self.gvf_iterations):
+        for _ in range(1, self.gvf_iterations + 1):
             u_lap = self.laplacian(self.u)
             v_lap = self.laplacian(self.v)
 
@@ -143,7 +143,7 @@ class ActiveContour:
         #revisar plt.streamploat
         return
 
-    def getCoords(self, xyRes = np.array([1.,1.])) -> None:
+    def getCoords(self, xyRes = np.array([1.,1.])) -> np.ndarray:
         """It returns the coordinates x and y of the image.
 
         Parameters
@@ -279,8 +279,8 @@ class ActiveContour:
         if bool(f_close):
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.xCoords = np.concatenate((x_out, np.array([x_out[0]])), axis = None)
-            self.yCoords = np.concatenate((y_out, np.array([y_out[0]])), axis = None)
+            self.x = np.concatenate((x_out, np.array([x_out[0]])), axis = None)
+            self.y = np.concatenate((y_out, np.array([y_out[0]])), axis = None)
         else:
             x_out = dx1(tx)
             y_out = dy1(tx)
