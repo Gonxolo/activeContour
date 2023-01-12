@@ -123,7 +123,7 @@ class ActiveContour:
 
         # Solve iteratively for the GGVF [u, v]
         # delta_x = delta_y = delta_t = 1
-        for j in range(self.gvf_iterations):
+        for _ in range(1, self.gvf_iterations + 1):
             u_lap = self.laplacian(self.u)
             v_lap = self.laplacian(self.v)
 
