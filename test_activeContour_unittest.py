@@ -68,6 +68,26 @@ class TestActiveContour(unittest.TestCase):
 
         self.assertTrue(np.allclose(expected_convolution, calculated_convolution))
 
+        test_matrix = [
+            [-0.836854,  -0.172280,   0.187117,   1.61544,   -0.176774],
+            [ 0.653145,  -0.546364,   0.194146,   0.925709,   1.20432],
+            [ 1.53055,   -1.35556,    0.0514889,  1.02018,   -1.22616],
+            [ 0.708497,   0.871673,  -0.789721,   0.332079,   0.205603],
+            [-0.169367,  -0.318417,  -0.295643,   0.522291,  -2.23105]
+        ]
+
+        expected_matrix_convolution = [
+            [ 0.66591765,      0.012273326,   0.052208400,    -1.0948680,      0.56363349],
+            [-0.59603944,      0.75719726,    0.054236547,    -0.46943980,    -0.92206375],
+            [-1.2139334,       1.7500138,     0.019178236,    -0.98239035,     1.2502566],
+            [-0.45590434,     -0.91020440,    0.92644553,     -0.35022358,    -0.74269571],
+            [ 0.33935901,      0.17016366,    0.11910681,     -1.0048016,      1.3236182]
+        ]
+
+        obtained_matrix_convolution = self.activeContour.laplacian(test_matrix)
+
+        self.assertTrue(np.allclose(expected_matrix_convolution, obtained_matrix_convolution))
+
     def test_gradient(self):
         
         test_matrix_size = 5 # square matrix (n x n)
