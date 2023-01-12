@@ -5,7 +5,7 @@ from ActiveContour import ActiveContour
 class TestActiveContour(unittest.TestCase):
     def setUp(self) -> None:
         self.image = [[1,2,3],
-                 [4,5,6]]
+                      [4,5,6]]
         self.x = [1,2,3]
         self.y = [4,5,6]
         self.alpha_min_value = 0.001
@@ -70,18 +70,56 @@ class TestActiveContour(unittest.TestCase):
 
     def test_gradient(self):
         
+        test_matrix_size = 5 # square matrix (n x n)
+        test_matrix = np.arange(test_matrix_size * test_matrix_size) \
+                        .reshape([test_matrix_size, test_matrix_size])
+        
+        test_matrix = [
+            [-0.836854,  -0.172280,   0.187117,   1.61544,   -0.176774],
+            [ 0.653145,  -0.546364,   0.194146,   0.925709,   1.20432],
+            [ 1.53055,   -1.35556,    0.0514889,  1.02018,   -1.22616],
+            [ 0.708497,   0.871673,  -0.789721,   0.332079,   0.205603],
+            [-0.169367,  -0.318417,  -0.295643,   0.522291,  -2.23105]
+        ]
+
+        expected_gradient_0 = [
+            [ 0.511986,    0.511986,   0.893860,  -0.181946,  -0.181946],
+            [-0.229499,   -0.229499,   0.736036,   0.505087,   0.505087],
+            [-0.739533,   -0.739533,   1.18787,   -0.638825,  -0.638825],
+            [-0.749109,   -0.749109,  -0.269797,   0.497662,   0.497662],
+            [-0.0631376,  -0.0631376,  0.420354,  -0.967704,  -0.967704]
+        ]
+
+        expected_gradient_1 = [
+            [ 1.18370,   -0.591640,  -0.0678143,  -0.297631,  -0.524693],
+            [ 1.18370,   -0.591640,  -0.0678143,  -0.297631,  -0.524693],
+            [ 0.0276763,  0.709018,  -0.491933,   -0.296815,  -0.499359],
+            [-0.849961,   0.518571,  -0.173566,   -0.248944,  -0.502445],
+            [-0.849961,   0.518571,  -0.173566,   -0.248944,  -0.502445],
+        ]
+
+        obtained_gradient_0 = self.activeContour.gradient(test_matrix, 0)
+        obtained_gradient_1 = self.activeContour.gradient(test_matrix, 1)
+        
+        self.assertTrue(np.allclose(expected_gradient_0, obtained_gradient_0, atol=1e-07))
+        self.assertTrue(np.allclose(expected_gradient_1, obtained_gradient_1, atol=1e-07))
+
+        expected_error = -1
+        obtained_error = self.activeContour.gradient(test_matrix, 2)
+        self.assertEqual(expected_error, obtained_error)
+
         pass
 
     def test_edgeMap(self):
         pass
     
-    def test_calcGGVF():
+    def test_calcGGVF(self):
         pass
 
-    def test_plotGVF():
+    def test_plotGVF(self):
         pass
 
-    def test_getCoords():
+    def test_getCoords(self):
         pass
 
     
