@@ -27,6 +27,12 @@ def polygon_perimeter(x: list, y: list, xyFactor: list = [1.0, 1.0]) -> np.ndarr
     if len(x) == 1: 
         return 0.0
 
+    if len(y) == 0: 
+        return -1.0
+    
+    if len(y) == 1: 
+        return 0.0
+
     if len(xyFactor) == 0:
         xyFactor = np.array([1.0, 1.0])
     
