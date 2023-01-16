@@ -58,7 +58,7 @@ class TestActiveContour(unittest.TestCase):
 
     def test_calcNorm_LInfiniteForVector(self):
         self.assertAlmostEqual(calcNorm_LInfiniteForVector(self.vec),1.61544, 5)
-
+    
     def test_polygon_line_sample(self):
 
         x = [-1.0, -1.0, 1.0, 1.0]
@@ -95,4 +95,4 @@ class TestActiveContour(unittest.TestCase):
         self.assertTrue(np.allclose(expected_y_out, obtained_y_out, atol=1e-6))
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main() # pragma: no cover
