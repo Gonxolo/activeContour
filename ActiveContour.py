@@ -331,10 +331,10 @@ class ActiveContour:
         
 
     # TODO: aqui pasan muchas cosas
-    def adjustContour(self, perimeter_factor, f_close, plot_contour, fix_point_count, 
-                        fix_point_indices, f_keep_point_count, f_compute_convergence, 
-                        convergence_thresh, convergence_metric_type, 
-                        convergence_metric_value) -> None:
+    def adjustContour(self, perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, 
+                        fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
+                        convergence_thresh=None, convergence_metric_type=None, 
+                        convergence_metric_value=None) -> np.ndarray:
         """Runs the GVF Active Contour code to completion.
 
         Parameters
