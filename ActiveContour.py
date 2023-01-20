@@ -62,8 +62,8 @@ class ActiveContour:
         #para asegurar tipo de arrays, poner el tipo (d_type=float64? o double)
 
         self.image = np.array(image, dtype=np.float64)
-        self.x = np.array(x_coords, dtype=np.float64)
-        self.y = np.array(y_coords, dtype=np.float64)
+        self.x = x_coords
+        self.y = y_coords
         self.alpha = max(alpha, 0.001)
         self.beta = max(beta, 0.001)
         self.gamma = max(gamma, 0.1)
