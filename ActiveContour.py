@@ -9,9 +9,9 @@ from scipy.interpolate import CubicSpline
 class ActiveContour:
 
     # TODO: Aqui recibimos los parametros para inicializar el algoritmo
-    def __init__(self, image: list, x_coords: list, y_coords: list, alpha: float = 0.1, beta: float = 0.25,
-                 gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, gvf_iterations: int = 100,
-                 iterations: int = 200) -> None:
+    def __init__(self, image: list, x_coords: list = None, y_coords: list = None, alpha: float = 0.1, beta: float = 0.25,
+                 gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, vf_iterations: int = 100,
+                 contour_iterations: int = 200) -> None:
 
         """[Descripcion de la clase]
 
@@ -52,8 +52,8 @@ class ActiveContour:
         self.gamma = max(gamma, 0.1)
         self.kappa = max(kappa, 0.0)
         self.mu = max(min(mu, 0.25), 0.001)
-        self.gvf_iterations = max(gvf_iterations, 1)
-        self.iterations = max(iterations, 1)
+        self.vf_iterations = max(int(vf_iterations), 1)
+        self.contour_iterations = max(int(contour_iterations), 1)
 
         # pU (edgeMap)
         # pV (edgeMap)
@@ -148,7 +148,7 @@ class ActiveContour:
 
         # Solve iteratively for the GGVF [u, v]
         # delta_x = delta_y = delta_t = 1
-        for _ in range(1, self.gvf_iterations + 1):
+        for _ in range(1, self.vf_iterations + 1):
             u_lap = self.laplacian(self.u)
             v_lap = self.laplacian(self.v)
 
