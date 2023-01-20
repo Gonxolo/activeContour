@@ -559,14 +559,14 @@ class ActiveContour:
                 if f_compute_convergence:
                     delta_mag = np.sqrt(np.square(x_delta) + np.square(y_delta))
 
-                    if var_metric == 'Hausdorff': variation = None # TODO: s_HausdorffDistanceFor2Dpoints(*self.pX, *self.pY, lastIterX, lastIterY)
-                    elif var_metric == 'L1norm'   : variation = None # TODO: calcNorm_L1ForVector(deltaMag)
-                    elif var_metric == 'L2norm'   : variation = None # TODO: calcNorm_L2ForVector(deltaMag)
-                    elif var_metric == 'LinfNorm' : variation = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
-                    elif var_metric == 'average'  : variation = None # TODO: mean(deltaMag)
-                    elif var_metric == 'avgFracPerimeter': variation = None # TODO: mean(deltaMag) / polygonPerimeter(*self.pX, *self.pY)
-                    elif var_metric == 'avgFracPerimeter0': variation = None # TODO: mean(deltaMag) / perimeterIt0
-                    else: variation = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
+                    if var_metric == 'Hausdorff': variation = hausdorffDistanceFor2Dpoints(self.x, self.y, last_iter_x, last_iter_y)
+                    elif var_metric == 'L1norm'   : variation = calcNorm_L1ForVector(delta_mag)
+                    elif var_metric == 'L2norm'   : variation = calcNorm_L2ForVector(delta_mag)
+                    elif var_metric == 'LinfNorm' : variation = calcNorm_LInfiniteForVector(delta_mag)
+                    elif var_metric == 'average'  : variation = np.mean(delta_mag)
+                    elif var_metric == 'avgFracPerimeter': variation = np.mean(delta_mag) / polygon_perimeter(self.x, self.y)
+                    elif var_metric == 'avgFracPerimeter0': variation = np.mean(delta_mag) / perimeter_it_0
+                    else: variation = calcNorm_LInfiniteForVector(delta_mag)
 
                     f_log = 0
                     f_log_all = 0
@@ -575,13 +575,13 @@ class ActiveContour:
                         log_file_path = 'D:\\tmp\\snakeLog.txt'
                         msg = f"{var_metric} convergence criterion value = {variation} at iteration {j}"
                         if f_log_all:
-                            hd = None # TODO: s_HausdorffDistanceFor2Dpoints(*self.pX, *self.pY, lastIterX, lastIterY)
-                            l1 = None # TODO: calcNorm_L1ForVector(deltaMag)
-                            l2 = None # TODO: calcNorm_L2ForVector(deltaMag)
-                            li = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
-                            avg = None # TODO: mean(deltaMag)
-                            avg_norm_perim_it = None # TODO: mean(deltaMag) / polygonPerimeter(*self.pX, *self.pY)
-                            avg_norm_perim_0  = None # TODO: mean(deltaMag) / perimeterIt0
+                            hd = hausdorffDistanceFor2Dpoints(self.x, self.y, last_iter_x, last_iter_y)
+                            l1 = calcNorm_L1ForVector(delta_mag)
+                            l2 = calcNorm_L2ForVector(delta_mag)
+                            li = calcNorm_LInfiniteForVector(delta_mag)
+                            avg = np.mean(delta_mag)
+                            avg_norm_perim_it = np.mean(delta_mag) / polygon_perimeter(self.x, self.y)
+                            avg_norm_perim_0  = np.mean(delta_mag) / perimeter_it_0
                             msg = ";".join(list(map(str, [hd, l1, l2, li, avg, avg_norm_perim_it, avg_norm_perim_0, j])))
                         # TODO: file_logger(msg, log_file_path)
                     
