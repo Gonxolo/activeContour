@@ -307,8 +307,8 @@ class ActiveContour:
         y1 = dy1(t1)
 
         #compute cumulative path length.
-        ds = np.sqrt(np.square((x1[1:] - x1)) + np.square((y1[1:] - y1)))
-        ss = np.concatenate((np.array([0], dtype=np.float64), np.cumsum(ds)), axis = None)
+        ds = np.sqrt(np.square((x1[1:] - x1[:len(x1)-1])) + np.square((y1[1:] - y1[:len(y1)-1])))
+        ss = np.concatenate((np.array([0], dtype=np.float64), np.cumsum(ds, dtype=np.float64)), axis = None, dtype=np.float64)
 
         #Invert this curve, solve for TX, which should be evenly sampled in the arc length space.
         sx = np.arange(points) * (ss[nc] / points)
