@@ -280,8 +280,8 @@ class ActiveContour:
         
         #Interpolate very finely
         nc = (npts - 1) * 100
-        t = np.arange(npts)
-        t1 = np.arange(nc + 1) / 100 
+        t = np.arange(npts, dtype=np.float64)
+        t1 = np.arange(nc + 1, dtype=np.float64) / 100 
         csx = CubicSpline(t, x_in) 
         x1 = csx(t1)
         csy = CubicSpline(t, y_in)
