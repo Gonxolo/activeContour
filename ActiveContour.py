@@ -390,7 +390,14 @@ class ActiveContour:
             else:
                 npts_iter = self.npts
 
-        except NameError: # En caso de que perimeter_factor no este definido
+        # En caso de que perimeter_factor no este definido 
+        except NameError: 
+            print("perimeter_factor no esta definido")
+            npts_iter = self.npts
+        
+        # En caso de que perimeter_factor este definido pero tenga el tipo
+        # incorrecto
+        except TypeError: 
             npts_iter = self.npts
         
         if npts_iter != self.npts: # TODO: and ~keyword_set(fKeepPointCount)
