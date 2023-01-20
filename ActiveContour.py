@@ -485,7 +485,7 @@ class ActiveContour:
                         if perimeter_factor: # TODO keyword_set(perimeter_factor)
                             poly_line_length = 0.0
                             for k in range(len(x_tmp) - 1):
-                                poly_line_length += np.emath.sqrt(np.square(x_tmp[k+1] - x_tmp[k]) 
+                                poly_line_length += np.sqrt(np.square(x_tmp[k+1] - x_tmp[k]) 
                                                     + np.square(y_tmp[k+1] - y_tmp[k]))
                             npts_iter = max((round(poly_line_length) * max(perimeter_factor, 0.1)), 5)
 
@@ -512,7 +512,7 @@ class ActiveContour:
                         if perimeter_factor: # TODO keyword_set(perimeter_factor)
                             poly_line_length = 0.0
                             for k in range(len(self.x) - 1):
-                                poly_line_length += np.emath.sqrt(np.square(x_tmp_2[k+1] - x_tmp_2[k]) 
+                                poly_line_length += np.sqrt(np.square(x_tmp_2[k+1] - x_tmp_2[k]) 
                                                     + np.square(y_tmp_2[k+1] - y_tmp_2[k]))
                             npts_iter = max((round(poly_line_length) * max(perimeter_factor, 0.1)), 5)
 
