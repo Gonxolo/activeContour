@@ -1,8 +1,6 @@
 import numpy as np
 from scipy import interpolate
 from scipy.ndimage import convolve
-
-from geometryFunctions import polygon_perimeter
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 
