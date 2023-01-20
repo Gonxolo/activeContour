@@ -399,9 +399,10 @@ class ActiveContour:
         # incorrecto
         except TypeError: 
             npts_iter = self.npts
-        
+
         if npts_iter != self.npts: # TODO: and ~keyword_set(fKeepPointCount)
-            self.arcSample(points=npts_iter, f_close=f_close)
+            # self.arcSample(points=npts_iter, f_close=f_close)
+            self.x, self.y = polygon_line_sample(np.copy(self.x), np.copy(self.y), n_points_per_pix = 1/2)
 
         perimeter_it_0 = polygon_perimeter(self.x, self.y)
 
