@@ -365,7 +365,7 @@ class ActiveContour:
         The {x, y} contour point list.
         """
 
-        if len(plot_contour) == 0: plot_contour = 0
+        if plot_contour is None: plot_contour = 0
 
         # checkear si x e y son validos sino return -1
 
