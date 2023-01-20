@@ -433,9 +433,9 @@ class ActiveContour:
             except NameError:
                 var_metric = 'LinfNorm'
         
-        if self.iterations >= 1:
+        if self.contour_iterations >= 1:
 
-            for j in range(self.iterations):
+            for j in range(self.contour_iterations):
 
                 if f_compute_convergence:
                     last_iter_x = np.copy(self.x)
@@ -553,8 +553,8 @@ class ActiveContour:
                 
                 if plot_contour > 0:
                     if j == 1: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, linestyle = 1, thick = 3
-                    elif j == self.iterations: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, thick = 3
-                    else: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = (255 - (self.iterations - j) * 30) > 100
+                    elif j == self.contour_iterations: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, thick = 3
+                    else: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = (255 - (self.contour_iterations - j) * 30) > 100
             
                 if f_compute_convergence:
                     delta_mag = np.sqrt(np.square(x_delta) + np.square(y_delta))
