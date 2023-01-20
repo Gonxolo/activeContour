@@ -460,9 +460,9 @@ class ActiveContour:
                     c = 2*alpha + 6*beta
 
                     abc_matrix = np.diag(a[0:npts_iter-2], 2) + np.diag(a[npts_iter-2:npts_iter], -(npts_iter-2)) \
-                                + np.diag(b[0:npts_iter-1], 1) + np.diag(b[npts_iter-1], -(npts_iter-1)) \
+                                + np.diag(b[0:npts_iter-1], 1) + np.diag([b[npts_iter-1]], -(npts_iter-1)) \
                                 + np.diag(c + self.gamma) \
-                                + np.diag(b[0:npts_iter-1], -1) + np.diag(b[npts_iter-1], (npts_iter-1)) \
+                                + np.diag(b[0:npts_iter-1], -1) + np.diag([b[npts_iter-1]], (npts_iter-1)) \
                                 + np.diag(a[0:npts_iter-2], -2) + np.diag(a[npts_iter-2:npts_iter], (npts_iter-2))
 
                     inv_array = np.linalg.inv(abc_matrix)
