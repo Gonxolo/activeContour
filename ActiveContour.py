@@ -4,6 +4,11 @@ from scipy.ndimage import convolve
 
 from geometryFunctions import polygon_perimeter
 from scipy.interpolate import CubicSpline
+import matplotlib.pyplot as plt
+
+
+from geometryFunctions import *
+from hausdorffDistanceCalc import hausdorffDistanceFor2Dpoints
 
 
 class ActiveContour:
