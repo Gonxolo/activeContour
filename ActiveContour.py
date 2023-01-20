@@ -386,7 +386,7 @@ class ActiveContour:
 
         try:
             if fix_point_count == 0:
-                npts_iter = np.max(round(polygon_perimeter(self.x, self.y) * np.max(perimeter_factor, 0.1)), 5)
+                npts_iter = max(round(polygon_perimeter(self.x, self.y) * max(perimeter_factor, 0.1)), 5)
             else:
                 npts_iter = self.npts
 
@@ -479,7 +479,7 @@ class ActiveContour:
                             for k in range(len(x_tmp) - 1):
                                 poly_line_length += np.emath.sqrt(np.square(x_tmp[k+1] - x_tmp[k]) 
                                                     + np.square(y_tmp[k+1] - y_tmp[k]))
-                            npts_iter = np.max((round(poly_line_length) * np.max(perimeter_factor, 0.1)), 5)
+                            npts_iter = max((round(poly_line_length) * max(perimeter_factor, 0.1)), 5)
 
                         if not f_keep_point_count: # TODO: ~keyword_set(f_point_count)
                             self.arcSample(points=npts_iter)
@@ -506,7 +506,7 @@ class ActiveContour:
                             for k in range(len(self.x) - 1):
                                 poly_line_length += np.emath.sqrt(np.square(x_tmp_2[k+1] - x_tmp_2[k]) 
                                                     + np.square(y_tmp_2[k+1] - y_tmp_2[k]))
-                            npts_iter = np.max((round(poly_line_length) * np.max(perimeter_factor, 0.1)), 5)
+                            npts_iter = max((round(poly_line_length) * max(perimeter_factor, 0.1)), 5)
 
                         if not f_keep_point_count:
                             self.arcSample(points=npts_iter)
@@ -536,7 +536,7 @@ class ActiveContour:
                     
                     # Re-interpolate the snake points.
                     if perimeter_factor: # TODO: keyword_set(perimeter_factor)
-                        npts_iter = np.max((round(polygon_perimeter(self.x, self.y) * np.max(perimeter_factor, 0.1))), 5)
+                        npts_iter = max((round(polygon_perimeter(self.x, self.y) * max(perimeter_factor, 0.1))), 5)
                     
                     f_close = 1
 
