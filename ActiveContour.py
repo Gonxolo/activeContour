@@ -368,7 +368,13 @@ class ActiveContour:
         if plot_contour is None: plot_contour = 0
 
         # checkear si x e y son validos sino return -1
+        if not isinstance(self.get_x_coords(), np.ndarray):
+            return -1
 
+        if not isinstance(self.get_y_coords(), np.ndarray):
+            return -1
+
+            if len(fix_point_indices) > 0:
         if len(fix_point_indices) > 0:
             fix_point_count = len(fix_point_indices)
         else:
