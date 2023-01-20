@@ -15,32 +15,49 @@ class ActiveContour:
 
         """[Descripcion de la clase]
 
-        :param image: Image file for which the active contour (snake) will be applied.
-                        This argument must be 2D.
+        Parameters
+        ----------
 
-        :param x_coords: The initial X points of the active contour of the snake. Optional.
-                        Must be used with Y.
+        image : list
+                Image file for which the active contour (snake) will be applied.
+                This argument must be 2D.
 
-        :param y_coords: The initial Y points of the active contour of the snake. Optional.
-                        Must be used with X.
+        x_coords : list
+                The initial X points of the active contour of the snake. Optional.
+                Must be used with Y.
 
-        :param alpha: The elasticity parameter of the active contour. It reflects the contour's ability to stretch along
-                        its length. Default: 0.10.
+        y_coords : list
+                The initial Y points of the active contour of the snake. Optional.
+                Must be used with X.
 
-        :param beta: The rigidity parameter of the active contour. It reflects the contour's ability to bend, as, for
-                        example, around corners. Default: 0.25.
+        alpha : float 
+                The elasticity parameter of the active contour. It reflects the 
+                contour's ability to stretch along its length. Default: 0.10.
 
-        :param gamma: The viscosity parameter. Larger values make it harder to deform the active contour in space.
-                        Default: 1.0.
+        beta : float
+                The rigidity parameter of the active contour. It reflects the 
+                contour's ability to bend, as, for example, around corners. 
+                Default: 0.25.
 
-        :param kappa: The external force weight. Default: 1.25.
+        gamma : float
+                The viscosity parameter. Larger values make it harder to deform 
+                the active contour in space. Default: 1.0.
 
-        :param mu: The regularization parameter. this should be set according to the amount of noise in the image. Use a
-                        larger value for noisier images. Default: 0.10.
+        kappa : float
+                The external force weight. Default: 1.25.
 
-        :param gvf_iterations: The number of iterations for calculation the Gradient Vector Flow (GVF). Default: 100.
+        mu : float
+                The regularization parameter. this should be set according 
+                to the amount of noise in the image. 
+                Use a larger value for noisier images. Default: 0.10.
 
-        :param iterations: The number of iterations to use in calculating the snake positions. Default: 200.
+        vf_iterations : int
+                The number of iterations for calculation the Gradient Vector 
+                Flow (GVF). Default: 100.
+
+        contour_iterations : int
+                The number of iterations to use in calculating the snake 
+                positions. Default: 200.
         """
         #para asegurar tipo de arrays, poner el tipo (d_type=float64? o double)
 
