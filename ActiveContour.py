@@ -324,10 +324,10 @@ class ActiveContour:
         else:
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.xCoords = np.concatenate((x_out, np.array([x_in[npts - 1]], dtype=np.float64)), axis = None)
-            self.yCoords = np.concatenate((y_out, np.array([y_in[npts - 1]], dtype=np.float64)), axis = None)
+            self.x = np.concatenate((x_out, np.array([x_in[npts - 1]], dtype=np.float64)), axis = None)
+            self.y = np.concatenate((y_out, np.array([y_in[npts - 1]], dtype=np.float64)), axis = None)
         
-        self.npts = len(self.xCoords)
+        self.npts = len(self.x)
         
 
     # TODO: aqui pasan muchas cosas
