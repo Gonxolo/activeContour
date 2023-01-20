@@ -374,15 +374,16 @@ class ActiveContour:
         if not isinstance(self.get_y_coords(), np.ndarray):
             return -1
 
+        try:
             if len(fix_point_indices) > 0:
-        if len(fix_point_indices) > 0:
-            fix_point_count = len(fix_point_indices)
-        else:
-            if len(fix_point_count) > 0:
-                fix_point_count = np.max(fix_point_count, 0)
+                fix_point_count = len(fix_point_indices)
+            elif len(fix_point_count) > 0: # TODO: Esto deberia chequear si se fijo la variable fix_point_count
+                fix_point_count = max(fix_point_count, 0)
             else:
                 fix_point_count = 0
-        
+        except TypeError:
+            fix_point_count = 0
+
         try:
             if fix_point_count == 0:
                 npts_iter = np.max(round(polygon_perimeter(self.x, self.y) * np.max(perimeter_factor, 0.1)), 5)
