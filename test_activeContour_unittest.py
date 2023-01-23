@@ -276,11 +276,6 @@ class TestActiveContour(unittest.TestCase):
     def test_adjustContour(self):
         pass
 
-    def test_gradient(self):
-        pass
-
-    def test_edgeMap(self):
-        pass
 
 if __name__ == '__main__':
     unittest.main() # pragma: no cover

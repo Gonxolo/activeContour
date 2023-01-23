@@ -1,59 +1,79 @@
 import numpy as np
 from scipy import interpolate
 from scipy.ndimage import convolve
-
-from geometryFunctions import polygon_perimeter
 from scipy.interpolate import CubicSpline
+import matplotlib.pyplot as plt
+
+
+from geometryFunctions import *
+from hausdorffDistanceCalc import hausdorffDistanceFor2Dpoints
 
 
 class ActiveContour:
 
     # TODO: Aqui recibimos los parametros para inicializar el algoritmo
-    def __init__(self, image: list, x_coords: list, y_coords: list, alpha: float = 0.1, beta: float = 0.25,
-                 gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, gvf_iterations: int = 100,
-                 iterations: int = 200) -> None:
+    def __init__(self, image: list, x_coords: list = None, y_coords: list = None, alpha: float = 0.1, beta: float = 0.25,
+                 gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, vf_iterations: int = 100,
+                 contour_iterations: int = 200) -> None:
 
         """[Descripcion de la clase]
 
-        :param image: Image file for which the active contour (snake) will be applied.
-                        This argument must be 2D.
+        Parameters
+        ----------
 
-        :param x_coords: The initial X points of the active contour of the snake. Optional.
-                        Must be used with Y.
+        image : list
+                Image file for which the active contour (snake) will be applied.
+                This argument must be 2D.
 
-        :param y_coords: The initial Y points of the active contour of the snake. Optional.
-                        Must be used with X.
+        x_coords : list
+                The initial X points of the active contour of the snake. Optional.
+                Must be used with Y.
 
-        :param alpha: The elasticity parameter of the active contour. It reflects the contour's ability to stretch along
-                        its length. Default: 0.10.
+        y_coords : list
+                The initial Y points of the active contour of the snake. Optional.
+                Must be used with X.
 
-        :param beta: The rigidity parameter of the active contour. It reflects the contour's ability to bend, as, for
-                        example, around corners. Default: 0.25.
+        alpha : float 
+                The elasticity parameter of the active contour. It reflects the 
+                contour's ability to stretch along its length. Default: 0.10.
 
-        :param gamma: The viscosity parameter. Larger values make it harder to deform the active contour in space.
-                        Default: 1.0.
+        beta : float
+                The rigidity parameter of the active contour. It reflects the 
+                contour's ability to bend, as, for example, around corners. 
+                Default: 0.25.
 
-        :param kappa: The external force weight. Default: 1.25.
+        gamma : float
+                The viscosity parameter. Larger values make it harder to deform 
+                the active contour in space. Default: 1.0.
 
-        :param mu: The regularization parameter. this should be set according to the amount of noise in the image. Use a
-                        larger value for noisier images. Default: 0.10.
+        kappa : float
+                The external force weight. Default: 1.25.
 
-        :param gvf_iterations: The number of iterations for calculation the Gradient Vector Flow (GVF). Default: 100.
+        mu : float
+                The regularization parameter. this should be set according 
+                to the amount of noise in the image. 
+                Use a larger value for noisier images. Default: 0.10.
 
-        :param iterations: The number of iterations to use in calculating the snake positions. Default: 200.
+        vf_iterations : int
+                The number of iterations for calculation the Gradient Vector 
+                Flow (GVF). Default: 100.
+
+        contour_iterations : int
+                The number of iterations to use in calculating the snake 
+                positions. Default: 200.
         """
         #para asegurar tipo de arrays, poner el tipo (d_type=float64? o double)
 
-        self.image = np.array(image)
-        self.x = np.array(x_coords)
-        self.y = np.array(y_coords)
+        self.image = np.array(image, dtype=np.float64)
+        self.x = x_coords
+        self.y = y_coords
         self.alpha = max(alpha, 0.001)
         self.beta = max(beta, 0.001)
         self.gamma = max(gamma, 0.1)
         self.kappa = max(kappa, 0.0)
         self.mu = max(min(mu, 0.25), 0.001)
-        self.gvf_iterations = max(gvf_iterations, 1)
-        self.iterations = max(iterations, 1)
+        self.vf_iterations = max(int(vf_iterations), 1)
+        self.contour_iterations = max(int(contour_iterations), 1)
 
         # pU (edgeMap)
         # pV (edgeMap)
@@ -77,13 +97,37 @@ class ActiveContour:
         pass
 
     def get_x_coords(self):
-        return self.x if bool(self.x) else -1
+        try:
+            if len(self.x) <= 0:
+                return -1
+            self.x = np.array(self.x, dtype=np.float64)
+            return self.x
+        except ValueError:
+            return  -1
     
     def get_y_coords(self):
-        return self.y if bool(self.y) else -1
+        try:
+            if len(self.y) <= 0:
+                return -1
+            self.y = np.array(self.y, dtype=np.float64)
+            return self.y
+        except ValueError:
+            return  -1
     
     def get_GGVF(self):
-        return np.array([self.u, self.v]) if bool(self.u) else -1
+        try:
+            if len(self.u) <= 0:
+                return -1
+
+            if len(self.v) <= 0:
+                return -1
+
+            self.u = np.array(self.u, dtype=np.float64)
+            self.v = np.array(self.v, dtype=np.float64)
+            return np.array([self.u, self.v], dtype=np.float64)
+            
+        except ValueError:
+            return  -1
 
     def laplacian(self, image: np.ndarray) -> np.ndarray:
 
@@ -124,7 +168,7 @@ class ActiveContour:
 
         # Solve iteratively for the GGVF [u, v]
         # delta_x = delta_y = delta_t = 1
-        for _ in range(1, self.gvf_iterations + 1):
+        for _ in range(1, self.vf_iterations + 1):
             u_lap = self.laplacian(self.u)
             v_lap = self.laplacian(self.v)
 
@@ -135,7 +179,6 @@ class ActiveContour:
             # Optimized iteration scheme
             self.u = g * (self.u + u_lap) + c1
             self.v = g * (self.v + v_lap) + c2
-
         return
 
     # TODO: Plotear el campo GVF
@@ -143,7 +186,7 @@ class ActiveContour:
         #revisar plt.streamploat
         return
 
-    def getCoords(self, xyRes = np.array([1.,1.])) -> np.ndarray:
+    def getCoords(self, xyRes = np.array([1.,1.], dtype=np.float64)) -> np.ndarray:
         """It returns the coordinates x and y of the image.
 
         Parameters
@@ -157,7 +200,7 @@ class ActiveContour:
             Coordinates x and y of the image
              note:: in case xCoords is an invalid value, it returns -1.
         """
-        return np.array([xyRes[0] * self.x, xyRes[1] * self.y])
+        return np.array([xyRes[0] * self.x, xyRes[1] * self.y], dtype=np.float64)
 
     def setContour(self, x: list, y: list) -> None:
         """Set the [x, y] coordinates for the active contour.
@@ -169,13 +212,13 @@ class ActiveContour:
         y : list
             `y` coordinate array of the contour to be set.
         """
-        self.x = np.array(x)
-        self.y = np.array(y)
+        self.x = np.array(x, dtype=np.float64)
+        self.y = np.array(y, dtype=np.float64)
         self.npts = len(self.x)
         return
 
     # TODO:
-    def getPerimeter(self,xyRes = np.array([1.,1.])) -> float:
+    def getPerimeter(self,xyRes = np.array([1.,1.], dtype=np.float64)) -> float:
         """This method calculates the perimeter of a contour.
 
         Parameters:
@@ -192,7 +235,7 @@ class ActiveContour:
         p = self.getDistance(xyRes)
         return np.sum(p)
     
-    def getDistance(self, xyRes = np.array([1.,1.])) -> np.ndarray:
+    def getDistance(self, xyRes = np.array([1.,1.], dtype=np.float64)) -> np.ndarray:
         """This method calculates the distance between consecutive points.
         
         Parameters:
@@ -230,8 +273,8 @@ class ActiveContour:
         #Make sure the curve is closed (first point same as last point).
         if bool(f_close):
             if (x_in[0] != x_in[npts - 1]) or (y_in[0] != y_in[npts - 1]):
-                x_in = np.concatenate((x_in, np.array([x_in[0]])))
-                y_in = np.concatenate((y_in, np.array([y_in[0]])))
+                x_in = np.concatenate((x_in, np.array([x_in[0]], dtype=np.float64)))
+                y_in = np.concatenate((y_in, np.array([y_in[0]], dtype=np.float64)))
                 # print, "Active contour interpolation warning: adding 1 point to close the contour,
                 # according to the specified input"
                 npts += 1
@@ -240,8 +283,8 @@ class ActiveContour:
         
         #Interpolate very finely
         nc = (npts - 1) * 100
-        t = np.arange(npts)
-        t1 = np.arange(nc + 1) / 100 
+        t = np.arange(npts, dtype=np.float64)
+        t1 = np.arange(nc + 1, dtype=np.float64) / 100 
         csx = CubicSpline(t, x_in) 
         x1 = csx(t1)
         csy = CubicSpline(t, y_in)
@@ -267,8 +310,8 @@ class ActiveContour:
         y1 = dy1(t1)
 
         #compute cumulative path length.
-        ds = np.sqrt(np.square((x1[1:] - x1)) + np.square((y1[1:] - y1)))
-        ss = np.concatenate((np.array([0]), np.cumsum(ds)), axis = None)
+        ds = np.sqrt(np.square((x1[1:] - x1[:len(x1)-1])) + np.square((y1[1:] - y1[:len(y1)-1])))
+        ss = np.concatenate((np.array([0], dtype=np.float64), np.cumsum(ds, dtype=np.float64)), axis = None, dtype=np.float64)
 
         #Invert this curve, solve for TX, which should be evenly sampled in the arc length space.
         sx = np.arange(points) * (ss[nc] / points)
@@ -279,22 +322,22 @@ class ActiveContour:
         if bool(f_close):
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.x = np.concatenate((x_out, np.array([x_out[0]])), axis = None)
-            self.y = np.concatenate((y_out, np.array([y_out[0]])), axis = None)
+            self.x = np.concatenate((x_out, np.array([x_out[0]], dtype=np.float64)), axis = None)
+            self.y = np.concatenate((y_out, np.array([y_out[0]], dtype=np.float64)), axis = None)
         else:
             x_out = dx1(tx)
             y_out = dy1(tx)
-            self.xCoords = np.concatenate((x_out, np.array([x_in[npts - 1]])), axis = None)
-            self.yCoords = np.concatenate((y_out, np.array([y_in[npts - 1]])), axis = None)
+            self.x = np.concatenate((x_out, np.array([x_in[npts - 1]], dtype=np.float64)), axis = None)
+            self.y = np.concatenate((y_out, np.array([y_in[npts - 1]], dtype=np.float64)), axis = None)
         
-        self.npts = len(self.xCoords)
+        self.npts = len(self.x)
         
 
     # TODO: aqui pasan muchas cosas
-    def adjustContour(self, perimeter_factor, f_close, plot_contour, fix_point_count, 
-                        fix_point_indices, f_keep_point_count, f_compute_convergence, 
-                        convergence_thresh, convergence_metric_type, 
-                        convergence_metric_value) -> None:
+    def adjustContour(self, perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, 
+                        fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
+                        convergence_thresh=None, convergence_metric_type=None, 
+                        convergence_metric_value=None) -> np.ndarray:
         """Runs the GVF Active Contour code to completion.
 
         Parameters
@@ -325,29 +368,44 @@ class ActiveContour:
         The {x, y} contour point list.
         """
 
-        if len(plot_contour) == 0: plot_contour = 0
+        if plot_contour is None: plot_contour = 0
 
         # checkear si x e y son validos sino return -1
+        if not isinstance(self.get_x_coords(), np.ndarray):
+            return -1
 
-        if len(fix_point_indices) > 0:
-            fix_point_count = len(fix_point_indices)
-        else:
-            if len(fix_point_count) > 0:
-                fix_point_count = np.max(fix_point_count, 0)
+        if not isinstance(self.get_y_coords(), np.ndarray):
+            return -1
+
+        try:
+            if len(fix_point_indices) > 0:
+                fix_point_count = len(fix_point_indices)
+            elif len(fix_point_count) > 0: # TODO: Esto deberia chequear si se fijo la variable fix_point_count
+                fix_point_count = max(fix_point_count, 0)
             else:
                 fix_point_count = 0
-        
+        except TypeError:
+            fix_point_count = 0
+
         try:
             if fix_point_count == 0:
-                npts_iter = np.max(round(polygon_perimeter(self.x, self.y) * np.max(perimeter_factor, 0.1)), 5)
+                npts_iter = max(round(polygon_perimeter(self.x, self.y) * max(perimeter_factor, 0.1)), 5)
             else:
                 npts_iter = self.npts
 
-        except NameError: # En caso de que perimeter_factor no este definido
+        # En caso de que perimeter_factor no este definido 
+        except NameError: 
+            print("perimeter_factor no esta definido")
             npts_iter = self.npts
         
+        # En caso de que perimeter_factor este definido pero tenga el tipo
+        # incorrecto
+        except TypeError: 
+            npts_iter = self.npts
+
         if npts_iter != self.npts: # TODO: and ~keyword_set(fKeepPointCount)
-            self.arcSample(points=npts_iter, f_close=f_close)
+            # self.arcSample(points=npts_iter, f_close=f_close)
+            self.x, self.y = polygon_line_sample(np.copy(self.x), np.copy(self.y), n_points_per_pix = 1/2)
 
         perimeter_it_0 = polygon_perimeter(self.x, self.y)
 
@@ -360,9 +418,9 @@ class ActiveContour:
         vfy = 0.0
 
         abc_matrix = np.diag(a[0:npts_iter-2], 2) + np.diag(a[npts_iter-2:npts_iter], -(npts_iter-2)) \
-                    + np.diag(b[0:npts_iter-1], 1) + np.diag(b[npts_iter-1], -(npts_iter-1)) \
+                    + np.diag(b[0:npts_iter-1], 1) + np.diag([b[npts_iter-1]], -(npts_iter-1)) \
                     + np.diag(c + self.gamma) \
-                    + np.diag(b[0:npts_iter-1], -1) + np.diag(b[npts_iter-1], (npts_iter-1)) \
+                    + np.diag(b[0:npts_iter-1], -1) + np.diag([b[npts_iter-1]], (npts_iter-1)) \
                     + np.diag(a[0:npts_iter-2], -2) + np.diag(a[npts_iter-2:npts_iter], (npts_iter-2))
 
         inv_array = np.linalg.inv(abc_matrix)
@@ -378,18 +436,26 @@ class ActiveContour:
             except NameError:
                 var_metric = 'LinfNorm'
         
-        if self.iterations >= 1:
+        if self.contour_iterations >= 1:
 
-            for j in range(self.iterations):
+            for j in range(self.contour_iterations):
 
                 if f_compute_convergence:
                     last_iter_x = np.copy(self.x)
                     last_iter_y = np.copy(self.y)
 
                 if self.kappa > 0: # TODO: Encontrar remplazo para IDL:interpolate
-                    cs = interpolate.CubicSpline(self.x, self.y)
-                    vfx = cs(self.u)
-                    vfy = cs(self.v)
+                    points = (np.arange(self.image.shape[0]), np.arange(self.image.shape[1]))
+
+                    xi = np.transpose(np.vstack((self.x, self.y)))
+
+                    vfx = interpolate.interpn(points, self.v, xi, method='cubic')
+                    vfy = interpolate.interpn(points, self.u, xi, method='cubic')
+                    
+                    plt.quiver(self.x, self.y, vfx, vfy)
+                    plt.title(f"este grafico iteracion {j+1}")
+                    plt.show()
+
 
                 n_elem_inv_array = inv_array.shape[0]
                 n_elem_contour = len(self.x)
@@ -405,9 +471,9 @@ class ActiveContour:
                     c = 2*alpha + 6*beta
 
                     abc_matrix = np.diag(a[0:npts_iter-2], 2) + np.diag(a[npts_iter-2:npts_iter], -(npts_iter-2)) \
-                                + np.diag(b[0:npts_iter-1], 1) + np.diag(b[npts_iter-1], -(npts_iter-1)) \
+                                + np.diag(b[0:npts_iter-1], 1) + np.diag([b[npts_iter-1]], -(npts_iter-1)) \
                                 + np.diag(c + self.gamma) \
-                                + np.diag(b[0:npts_iter-1], -1) + np.diag(b[npts_iter-1], (npts_iter-1)) \
+                                + np.diag(b[0:npts_iter-1], -1) + np.diag([b[npts_iter-1]], (npts_iter-1)) \
                                 + np.diag(a[0:npts_iter-2], -2) + np.diag(a[npts_iter-2:npts_iter], (npts_iter-2))
 
                     inv_array = np.linalg.inv(abc_matrix)
@@ -430,9 +496,9 @@ class ActiveContour:
                         if perimeter_factor: # TODO keyword_set(perimeter_factor)
                             poly_line_length = 0.0
                             for k in range(len(x_tmp) - 1):
-                                poly_line_length += np.emath.sqrt(np.square(x_tmp[k+1] - x_tmp[k]) 
+                                poly_line_length += np.sqrt(np.square(x_tmp[k+1] - x_tmp[k]) 
                                                     + np.square(y_tmp[k+1] - y_tmp[k]))
-                            npts_iter = np.max((round(poly_line_length) * np.max(perimeter_factor, 0.1)), 5)
+                            npts_iter = max((round(poly_line_length) * max(perimeter_factor, 0.1)), 5)
 
                         if not f_keep_point_count: # TODO: ~keyword_set(f_point_count)
                             self.arcSample(points=npts_iter)
@@ -457,9 +523,9 @@ class ActiveContour:
                         if perimeter_factor: # TODO keyword_set(perimeter_factor)
                             poly_line_length = 0.0
                             for k in range(len(self.x) - 1):
-                                poly_line_length += np.emath.sqrt(np.square(x_tmp_2[k+1] - x_tmp_2[k]) 
+                                poly_line_length += np.sqrt(np.square(x_tmp_2[k+1] - x_tmp_2[k]) 
                                                     + np.square(y_tmp_2[k+1] - y_tmp_2[k]))
-                            npts_iter = np.max((round(poly_line_length) * np.max(perimeter_factor, 0.1)), 5)
+                            npts_iter = max((round(poly_line_length) * max(perimeter_factor, 0.1)), 5)
 
                         if not f_keep_point_count:
                             self.arcSample(points=npts_iter)
@@ -489,7 +555,7 @@ class ActiveContour:
                     
                     # Re-interpolate the snake points.
                     if perimeter_factor: # TODO: keyword_set(perimeter_factor)
-                        npts_iter = np.max((round(polygon_perimeter(self.x, self.y) * np.max(perimeter_factor, 0.1))), 5)
+                        npts_iter = max((round(polygon_perimeter(self.x, self.y) * max(perimeter_factor, 0.1))), 5)
                     
                     f_close = 1
 
@@ -498,20 +564,20 @@ class ActiveContour:
                 
                 if plot_contour > 0:
                     if j == 1: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, linestyle = 1, thick = 3
-                    elif j == self.iterations: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, thick = 3
-                    else: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = (255 - (self.iterations - j) * 30) > 100
+                    elif j == self.contour_iterations: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, thick = 3
+                    else: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = (255 - (self.contour_iterations - j) * 30) > 100
             
                 if f_compute_convergence:
                     delta_mag = np.sqrt(np.square(x_delta) + np.square(y_delta))
 
-                    if var_metric == 'Hausdorff': variation = None # TODO: s_HausdorffDistanceFor2Dpoints(*self.pX, *self.pY, lastIterX, lastIterY)
-                    elif var_metric == 'L1norm'   : variation = None # TODO: calcNorm_L1ForVector(deltaMag)
-                    elif var_metric == 'L2norm'   : variation = None # TODO: calcNorm_L2ForVector(deltaMag)
-                    elif var_metric == 'LinfNorm' : variation = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
-                    elif var_metric == 'average'  : variation = None # TODO: mean(deltaMag)
-                    elif var_metric == 'avgFracPerimeter': variation = None # TODO: mean(deltaMag) / polygonPerimeter(*self.pX, *self.pY)
-                    elif var_metric == 'avgFracPerimeter0': variation = None # TODO: mean(deltaMag) / perimeterIt0
-                    else: variation = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
+                    if var_metric == 'Hausdorff': variation = hausdorffDistanceFor2Dpoints(self.x, self.y, last_iter_x, last_iter_y)
+                    elif var_metric == 'L1norm'   : variation = calcNorm_L1ForVector(delta_mag)
+                    elif var_metric == 'L2norm'   : variation = calcNorm_L2ForVector(delta_mag)
+                    elif var_metric == 'LinfNorm' : variation = calcNorm_LInfiniteForVector(delta_mag)
+                    elif var_metric == 'average'  : variation = np.mean(delta_mag)
+                    elif var_metric == 'avgFracPerimeter': variation = np.mean(delta_mag) / polygon_perimeter(self.x, self.y)
+                    elif var_metric == 'avgFracPerimeter0': variation = np.mean(delta_mag) / perimeter_it_0
+                    else: variation = calcNorm_LInfiniteForVector(delta_mag)
 
                     f_log = 0
                     f_log_all = 0
@@ -520,13 +586,13 @@ class ActiveContour:
                         log_file_path = 'D:\\tmp\\snakeLog.txt'
                         msg = f"{var_metric} convergence criterion value = {variation} at iteration {j}"
                         if f_log_all:
-                            hd = None # TODO: s_HausdorffDistanceFor2Dpoints(*self.pX, *self.pY, lastIterX, lastIterY)
-                            l1 = None # TODO: calcNorm_L1ForVector(deltaMag)
-                            l2 = None # TODO: calcNorm_L2ForVector(deltaMag)
-                            li = None # TODO: calcNorm_LInfiniteForVector(deltaMag)
-                            avg = None # TODO: mean(deltaMag)
-                            avg_norm_perim_it = None # TODO: mean(deltaMag) / polygonPerimeter(*self.pX, *self.pY)
-                            avg_norm_perim_0  = None # TODO: mean(deltaMag) / perimeterIt0
+                            hd = hausdorffDistanceFor2Dpoints(self.x, self.y, last_iter_x, last_iter_y)
+                            l1 = calcNorm_L1ForVector(delta_mag)
+                            l2 = calcNorm_L2ForVector(delta_mag)
+                            li = calcNorm_LInfiniteForVector(delta_mag)
+                            avg = np.mean(delta_mag)
+                            avg_norm_perim_it = np.mean(delta_mag) / polygon_perimeter(self.x, self.y)
+                            avg_norm_perim_0  = np.mean(delta_mag) / perimeter_it_0
                             msg = ";".join(list(map(str, [hd, l1, l2, li, avg, avg_norm_perim_it, avg_norm_perim_0, j])))
                         # TODO: file_logger(msg, log_file_path)
                     
@@ -541,7 +607,7 @@ class ActiveContour:
                     print(msg)
                 convergence_metric_value = variation
 
-        return np.array([self.x, self.y])
+        return np.array([self.x, self.y], dtype=np.float64)
 
     # Se asume un int en direction TODO: deberia poder admitir vectores?
     # TODO: este metodo puede ser estatico
@@ -571,7 +637,7 @@ class ActiveContour:
         else:
             return -1 # Reemplazar este valor por algo mas indicativo. Una excepcion si solo se recibe direccion {0, 1}
 
-        return theGradient
+        return np.array(theGradient, dtype=np.float64)
 
     def edgeMap(self) -> None:
 
@@ -580,7 +646,7 @@ class ActiveContour:
         max_val = np.max(edge_map)
 
         if max_val != min_val:
-            edge_map = np.array([(i - min_val)/(max_val - min_val) for i in edge_map])
+            edge_map = np.array([(i - min_val)/(max_val - min_val) for i in edge_map], dtype=np.float64)
 
         self.u = self.gradient(edge_map, 0)
         self.v = self.gradient(edge_map, 1)
