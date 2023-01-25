@@ -560,7 +560,8 @@ class ActiveContour:
                     f_close = 1
 
                     if not f_keep_point_count: # TODO: ~keyword_set(f_keep_point_count)
-                        self.arcSample(points=npts_iter-1 if f_close else npts_iter, f_close=f_close)
+                        self.x, self.y = polygon_line_sample(np.copy(self.x), np.copy(self.y), n_points_per_pix = 1/2)
+                        # self.arcSample(points=npts_iter-1 if f_close else npts_iter, f_close=f_close)
                 
                 if plot_contour > 0:
                     if j == 1: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, linestyle = 1, thick = 3
