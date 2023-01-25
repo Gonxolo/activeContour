@@ -1,6 +1,6 @@
 import csv
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 import os
 
 
@@ -55,10 +55,28 @@ def get_coords_from_csv(filepath):
     
     return rois
 
-def get_image(image_path: str) -> np.ndarray:
+def get_image(image_path: str, padding=20) -> np.ndarray:
     
-    image_path = os.path.join(os.getcwd(), image_path)
+    image_path = os.path.join(os.getcwd(), 'img', image_path)
 
     im = Image.open(image_path)
+    im = ImageOps.flip(im)
 
-    return np.array(im)
+    width, height = im.size
+    
+    new_width = width + 2*padding
+    new_height = height + 2*padding
+    
+    if im.mode == 'L':
+        result = Image.new(im.mode, (new_width,new_height), (0))
+    elif im.mode == 'RGB':
+        result = Image.new(im.mode, (new_width,new_height), (0, 0, 0))
+    else:
+        print(f"Image is being change from image mode {im.mode} to RGB")
+        im = im.convert('RGB')
+        print(im.mode)
+        result = Image.new(im.mode, (new_width,new_height), (0, 0, 0))
+
+    result.paste(im, (padding, padding))
+
+    return np.array(result)
