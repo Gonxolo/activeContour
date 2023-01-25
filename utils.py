@@ -40,17 +40,20 @@ def get_coords_from_csv(filepath):
     
     filename = open(filepath, 'r')
 
-    file = csv.DictReader(filename, delimiter=";")
+    csv_reader = csv.reader(filename, delimiter=";")
 
-    x = []
-    y = []
+    n_cols = 0
+    for row in csv_reader:
+        n_cols = len(row) - 1
+        break
+    
+    rois = [[] for _ in range(n_cols)]
 
-    for col in file:
-        x.append(col['roi_0_contour_0_x'])
-        y.append(col['roi_0_contour_0_y'])
-
-    return x, y
-
+    for row in csv_reader:
+        for i in range(len(row) - 1):
+            rois[i].append(row[i])
+    
+    return rois
 
 def get_image(image_path: str) -> np.ndarray:
     
