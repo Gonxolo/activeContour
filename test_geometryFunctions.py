@@ -1,7 +1,7 @@
 import unittest
 from geometryFunctions import * 
 
-class TestActiveContour(unittest.TestCase):
+class TestGeometryFunctions(unittest.TestCase):
     def setUp(self) -> None:
         #Array generated randomly in IDL
         self.vec = np.array([-0.836854, -0.172280, 0.187117, 1.61544, -0.176774])
