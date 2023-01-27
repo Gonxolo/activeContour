@@ -1,6 +1,8 @@
 import unittest
 import numpy as np
 from ActiveContour import ActiveContour
+from squareArcSample import square
+import matplotlib.pyplot as plt
 
 class TestActiveContour(unittest.TestCase):
     def setUp(self) -> None:
@@ -271,7 +273,39 @@ class TestActiveContour(unittest.TestCase):
 
 
     def test_arcSample(self):
-        pass
+        #self.activeContour.x = (np.arange(200)/199)*2*np.pi
+        #self.activeContour.y = np.square(np.sin(self.activeContour.x))
+        #self.activeContour.x = [10.,20.,20.,10.]
+        #self.activeContour.y = [10.,10.,20.,20.]
+        p= square(5,5)
+        self.activeContour.x = p[0]
+        self.activeContour.y = p[1]
+        self.activeContour.arcSample()
+        x=[0.00000000,-0.58014998,-0.17731891,0.049729442, 0.51389080, 0.93157251, 1.4041335, 
+        1.9507974, 2.3813845, 2.8214716, 3.3746148,  3.8319307,  4.2534129, 4.7833706, 5.2796763, 5.6958180, 
+        6.1840133, 6.3620759, 6.9421967, 6.3816504, 5.8015004, 5.2213504, 4.6412003, 4.0610503, 3.4809003, 2.9007502, 2.3206002,
+         1.7404501, 1.1603001, 0.58015006, 0.00000000]
+
+        y=[0.00000000,0.00010550055,0.00072566078, 0.0042220621,0.24164031,0.64410106,0.97247970,0.86241725,0.47482068,
+        0.099024436,  0.053323608,0.40551146,0.80372407,0.99497004,0.71125907,0.30710604, 0.0092039522,0.00083755449,
+        0.00024512279, 9.7239541e-006, -3.3948152e-005, -5.9350635e-005, -7.5596225e-005, -8.5567938e-005, -9.0492961e-005, -9.0871624e-005,
+         -8.6739868e-005, -7.7685854e-005,-6.2641830e-005, -3.9139470e-005,0.00000000]
+        #print(self.activeContour.x)
+        #print(np.subtract(x,self.activeContour.x))
+        print("="*100)
+        f"x = {self.activeContour.x}"
+        print(f"x = {self.activeContour.x}")
+        print("="*100)
+        print(f"y = {self.activeContour.y}")
+        print("="*100)
+        plt.scatter(p[0],p[1])
+        plt.scatter(self.activeContour.x,self.activeContour.y,color='red')
+        plt.show()
+        #self.assertTrue(np.allclose(self.activeContour.x, x))
+        #self.assertTrue(np.allclose(self.activeContour.y, y))
+        #self.assertEqual(self.activeContour.npts, 31)
+        
+        
 
     def test_adjustContour(self):
         pass
