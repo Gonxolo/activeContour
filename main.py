@@ -1,6 +1,6 @@
-from ActiveContour import ActiveContour
-from utils import load_params, get_image, get_coords_from_csv
-from geometryFunctions import polygon_line_sample
+from src.ActiveContour import ActiveContour
+from src.utils import load_params, get_image, get_coords_from_csv
+from src.geometryFunctions import polygon_line_sample
 import numpy as np
 import matplotlib.pyplot as plt
 import time
