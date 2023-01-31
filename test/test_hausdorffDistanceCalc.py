@@ -1,5 +1,6 @@
 import unittest
-from hausdorffDistanceCalc import * 
+from src.hausdorffDistanceCalc import * 
+
 
 class TestHausdorffDistanceCalc(unittest.TestCase):
     def setUp(self) -> None:

@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from ActiveContour import ActiveContour
+from src.ActiveContour import ActiveContour
 
 class TestActiveContour(unittest.TestCase):
     def setUp(self) -> None:
@@ -36,7 +36,7 @@ class TestActiveContour(unittest.TestCase):
         self.assertTrue(self.activeContour.gamma >= self.gamma_min_value)
         self.assertTrue(self.activeContour.kappa >= self.kappa_min_value)
         self.assertTrue(self.mu_max_value >= self.activeContour.mu >= self.mu_min_value)
-        self.assertTrue(self.activeContour.gvf_iterations >= 1)
+        self.assertTrue(self.activeContour.vf_iterations >= 1)
         self.assertTrue(self.activeContour.contour_iterations >= 1)
 
         # [u, v] are initialized as None and the value is assigned in edgeMap()

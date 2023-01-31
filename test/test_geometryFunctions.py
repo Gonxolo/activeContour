@@ -1,5 +1,5 @@
 import unittest
-from geometryFunctions import * 
+from src.geometryFunctions import * 
 
 class TestGeometryFunctions(unittest.TestCase):
     def setUp(self) -> None:
