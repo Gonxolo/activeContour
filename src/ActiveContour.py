@@ -15,7 +15,8 @@ class ActiveContour:
                  gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, vf_iterations: int = 100,
                  contour_iterations: int = 200) -> None:
 
-        """[Descripcion de la clase]
+        """Class that represents the snake, the contour that deforms until reaching a state of equilibrium through an
+         optimization process. This class contains the methods needed to do that.
 
         Parameters
         ----------
@@ -60,7 +61,19 @@ class ActiveContour:
         contour_iterations : int
                 The number of iterations to use in calculating the snake 
                 positions. Default: 200.
+
+
+        Methods
+        -------
+
+        adjustContour(perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, 
+                        fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
+                        convergence_thresh=None, convergence_metric_type=None, 
+                        convergence_metric_value=None)
+                        Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it 
+                        reaches a sate of equilibrium.
         """
+        
         #para asegurar tipo de arrays, poner el tipo (d_type=float64? o double)
 
         self.image = np.array(image, dtype=np.float64)
@@ -96,6 +109,13 @@ class ActiveContour:
         pass
 
     def get_x_coords(self):
+        """It returns the array of coordinates x of the contour.
+
+        Returns
+        -------
+        np.ndarray
+            X coordinates of the contour.
+        """
         try:
             if len(self.x) <= 0:
                 return -1
@@ -105,6 +125,13 @@ class ActiveContour:
             return  -1
     
     def get_y_coords(self):
+        """It returns the array of coordinates y of the contour.
+
+        Returns
+        -------
+        np.ndarray
+            Y coordinates of the contour.
+        """
         try:
             if len(self.y) <= 0:
                 return -1
@@ -114,6 +141,13 @@ class ActiveContour:
             return  -1
     
     def get_GGVF(self):
+        """It returns the values of the GGVF, with its coordinates u and v.
+
+        Returns
+        -------
+        np.ndarray
+            It returns an array with the value of the GGVF.
+        """
         try:
             if len(self.u) <= 0:
                 return -1
@@ -129,12 +163,17 @@ class ActiveContour:
             return  -1
 
     def laplacian(self, image: np.ndarray) -> np.ndarray:
+        """Computes the laplacian of an image.
 
-        """
-        [Descripcion de la clase]
+        Parameters
+        ----------
+        image : np.ndarray
+            Image to apply the laplacian.
 
-        :param image: [Descripcion del parametro]
-
+        Returns
+        -------
+        np.ndarray
+            Returns the laplacian of the image, computing the convolution of it with a kernel.
         """
 
         kernel = np.zeros((5, 5))
@@ -151,6 +190,8 @@ class ActiveContour:
 
     # TODO: Computar el campo GGVF para el contorno activo
     def calcGGVF(self) -> None:
+        """It computes the GGVF, and sets the values of self.u and self.v.
+        """
 
         # Calculate gradients [fx, fy] to initialize the vector field [u, v].
         self.edgeMap()
@@ -262,7 +303,7 @@ class ActiveContour:
         ----------
         points : int, optional
             The number of points in the output vectors, by default 50.
-        f_close : _type_, optional
+        f_close : bool, optional
             Set this keyword to True to specify the contour curve, by default None.
         """
         #if size(*self.pX,/n_dimensions) eq 2 then begin, x_in = reform(*self.pX) ... ya lo hace python
@@ -341,34 +382,49 @@ class ActiveContour:
                         fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
                         convergence_thresh=None, convergence_metric_type=None, 
                         convergence_metric_value=None) -> np.ndarray:
-        """Runs the GVF Active Contour code to completion.
+        
+        """Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it 
+        reaches a sate of equilibrium.
 
         Parameters
         ----------
-        perimeter_factor : _type_
-            _description_
-        f_close : _type_
-            _description_
-        plot_contour : _type_
-            _description_
-        fix_point_count : _type_
-            _description_
-        fix_point_indices : _type_
-            _description_
-        f_keep_point_count : _type_
-            _description_
-        f_compute_convergence : _type_
-            _description_
-        convergence_thresh : _type_
-            _description_
-        convergence_metric_type : _type_
-            _description_
-        convergence_metric_value : _type_
-            _description_
+        perimeter_factor: float, optional
+            It indicates the factor to compute the number of points to use for a given contour, by default None.
+
+        f_close: bool, optional
+            Flag to indicate if a contour must be closed, adding an extra point, by default None.
+
+        plot_contour: int, optional
+            Flag to indicate if a contour must be closed, adding an extra point, by default None.
+
+        fix_point_count: int, optional
+            Number of points to fix in the contour, by default None.
+
+        fix_point_indices: np.ndarray, optional
+            Array of indices of the points to be fixed.
+
+        f_keep_point_count: bool, optional
+            Flag to indicate that the number of points in the contour must be kept, and if False, it re-interpolates them.
+
+        f_compute_convergence: bool, optional
+            Flaf to indicate that the convergence must be computed.
+
+        convergence_thresh: float, optional
+            Value of the convergence limit.
+
+        convergence_metric_type: string, optional
+            It indicates the type of metric to compute the variation between the contour in the current
+            iteration and the last iteration, until reaching convergence.
+
+        convergence_metric_value: float, optional
+            It indicates that the convergence must be computed, in case the flags f_compute_convergence or 
+            f_use_convergence_threshold where not set.
 
         Returns
         -------
-        The {x, y} contour point list.
+        np.ndarray
+            It returns an array with the coordinates x and y of the contour after the adjustment, when the state of 
+            equilibrium is reached.
         """
 
         if plot_contour is None: plot_contour = 0
@@ -612,6 +668,20 @@ class ActiveContour:
 
     # TODO: este metodo puede ser estatico
     def gradient(self, image: np.ndarray, direction: int) -> np.ndarray:
+        """Computes the gradient of the image's intensity.
+
+        Parameters
+        ----------
+        image : np.ndarray
+            Array with the intensity values per pixel of the image.
+        direction : int
+            It indicates the direction in which to calculate the gradient.
+
+        Returns
+        -------
+        np.ndarray
+            Returns the result of computing the gradient of the image.
+        """
 
         # TODO: si la direccion admite vectores entonces
         # Revisa la cantidad de elementos de la direccion
@@ -640,6 +710,8 @@ class ActiveContour:
         return np.array(theGradient, dtype=np.float64)
 
     def edgeMap(self) -> None:
+        """Computes the edge map of a given image, and sets the values of the coordinates u and v of the GGVF.
+        """
 
         edge_map = np.sqrt(np.square(self.gradient(self.image, 0)) + np.square(self.gradient(self.image, 1)))
         min_val = np.min(edge_map) # TODO: este valor por defecto podia ser 0, hablar con Jorge
