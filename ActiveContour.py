@@ -217,7 +217,6 @@ class ActiveContour:
         self.npts = len(self.x)
         return
 
-    # TODO:
     def getPerimeter(self,xyRes = np.array([1.,1.], dtype=np.float64)) -> float:
         """This method calculates the perimeter of a contour.
 
@@ -253,7 +252,6 @@ class ActiveContour:
         dy = np.square((np.roll(self.y,-1)-self.y)*xyRes[1])
         return np.power(dx + dy, 0.5)
 
-    # TODO:
     def arcSample(self, points = 50, f_close = None) -> None:
         """It takes a closed curve and re-samples it in equal arc lengths.
 
@@ -333,7 +331,6 @@ class ActiveContour:
         self.npts = len(self.x)
         
 
-    # TODO: aqui pasan muchas cosas
     def adjustContour(self, perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, 
                         fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
                         convergence_thresh=None, convergence_metric_type=None, 
@@ -444,7 +441,7 @@ class ActiveContour:
                     last_iter_x = np.copy(self.x)
                     last_iter_y = np.copy(self.y)
 
-                if self.kappa > 0: # TODO: Encontrar remplazo para IDL:interpolate
+                if self.kappa > 0:
                     points = (np.arange(self.image.shape[0]), np.arange(self.image.shape[1]))
 
                     xi = np.transpose(np.vstack((self.x, self.y)))
@@ -610,7 +607,6 @@ class ActiveContour:
 
         return np.array([self.x, self.y], dtype=np.float64)
 
-    # Se asume un int en direction TODO: deberia poder admitir vectores?
     # TODO: este metodo puede ser estatico
     def gradient(self, image: np.ndarray, direction: int) -> np.ndarray:
 
@@ -643,7 +639,7 @@ class ActiveContour:
     def edgeMap(self) -> None:
 
         edge_map = np.sqrt(np.square(self.gradient(self.image, 0)) + np.square(self.gradient(self.image, 1)))
-        min_val = np.min(edge_map) # TODO: este valor por defecto podia serr 0, hablar con Jorge
+        min_val = np.min(edge_map) # TODO: este valor por defecto podia ser 0, hablar con Jorge
         max_val = np.max(edge_map)
 
         if max_val != min_val:
