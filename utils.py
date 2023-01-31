@@ -5,6 +5,18 @@ import os
 
 
 def load_params(params_path: str) -> dict:
+    """_summary_
+
+    Parameters
+    ----------
+    params_path : str
+        _description_
+
+    Returns
+    -------
+    dict
+        _description_
+    """
     
     ac_params = {}
 
@@ -37,6 +49,18 @@ def load_params(params_path: str) -> dict:
 
         
 def get_coords_from_csv(filepath):
+    """_summary_
+
+    Parameters
+    ----------
+    filepath : _type_
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
     
     filename = open(filepath, 'r')
 
@@ -53,6 +77,18 @@ def get_coords_from_csv(filepath):
 
 
 def get_image(image_path: str) -> np.ndarray:
+    """_summary_
+
+    Parameters
+    ----------
+    image_path : str
+        _description_
+
+    Returns
+    -------
+    np.ndarray
+        _description_
+    """
     
     image_path = os.path.join(os.getcwd(), image_path)
 

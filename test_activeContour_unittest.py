@@ -277,7 +277,7 @@ class TestActiveContour(unittest.TestCase):
         #self.activeContour.y = np.square(np.sin(self.activeContour.x))
         #self.activeContour.x = [10.,20.,20.,10.]
         #self.activeContour.y = [10.,10.,20.,20.]
-        p= square(5,5)
+        p= square(1,1)
         self.activeContour.x = p[0]
         self.activeContour.y = p[1]
         self.activeContour.arcSample()
