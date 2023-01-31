@@ -108,8 +108,8 @@ def polygon_line_sample(x, y, n_points_per_pix = None, f_close_output = None,
     seg_limit = 2
     if bool(f_close_output):
         seg_limit = 1
-        x_in = np.concatenate(x_in, [x_in[0]])
-        y_in = np.concatenate(y_in, [y_in[0]])
+        x_in = np.concatenate((x_in, [x_in[0]]))
+        y_in = np.concatenate((y_in, [y_in[0]]))
     
     x_out = np.array([x_in[0]])
     y_out = np.array([y_in[0]])

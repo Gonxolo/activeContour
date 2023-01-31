@@ -217,7 +217,6 @@ class ActiveContour:
         self.npts = len(self.x)
         return
 
-    # TODO:
     def getPerimeter(self,xyRes = np.array([1.,1.], dtype=np.float64)) -> float:
         """This method calculates the perimeter of a contour.
 
@@ -253,7 +252,6 @@ class ActiveContour:
         dy = np.square((np.roll(self.y,-1)-self.y)*xyRes[1])
         return np.power(dx + dy, 0.5)
 
-    # TODO:
     def arcSample(self, points = 50, f_close = None) -> None:
         """It takes a closed curve and re-samples it in equal arc lengths.
 
@@ -336,7 +334,6 @@ class ActiveContour:
         self.npts = len(self.x)
         
 
-    # TODO: aqui pasan muchas cosas
     def adjustContour(self, perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, 
                         fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
                         convergence_thresh=None, convergence_metric_type=None, 
@@ -406,9 +403,9 @@ class ActiveContour:
         except TypeError: 
             npts_iter = self.npts
 
-        if npts_iter != self.npts: # TODO: and ~keyword_set(fKeepPointCount)
-            # self.arcSample(points=npts_iter, f_close=f_close)
-            self.x, self.y = polygon_line_sample(np.copy(self.x), np.copy(self.y), n_points_per_pix = 1/2)
+        if npts_iter != self.npts and not bool(f_keep_point_count):
+            self.arcSample(points=npts_iter, f_close=f_close)
+            # self.x, self.y = polygon_line_sample(np.copy(self.x), np.copy(self.y), n_points_per_pix = npts_iter)
 
         perimeter_it_0 = polygon_perimeter(self.x, self.y)
 
@@ -428,15 +425,15 @@ class ActiveContour:
 
         inv_array = np.linalg.inv(abc_matrix)
 
-        f_use_convergence_threshold = bool(convergence_thresh) or (convergence_thresh == 0) # TODO: convergence_thresh == 0 -> False
-        f_compute_convergence = f_compute_convergence \
-                                or convergence_metric_value \
+        f_use_convergence_threshold = bool(convergence_thresh) or (convergence_thresh == 0)
+        f_compute_convergence = bool(f_compute_convergence) \
+                                or bool(convergence_metric_value) \
                                 or f_use_convergence_threshold
 
         if f_compute_convergence:
-            try:
+            if bool(convergence_metric_type):
                 var_metric = convergence_metric_type
-            except NameError:
+            else:
                 var_metric = 'LinfNorm'
         
         if self.contour_iterations >= 1:
@@ -447,18 +444,13 @@ class ActiveContour:
                     last_iter_x = np.copy(self.x)
                     last_iter_y = np.copy(self.y)
 
-                if self.kappa > 0: # TODO: Encontrar remplazo para IDL:interpolate
+                if self.kappa > 0:
                     points = (np.arange(self.image.shape[0]), np.arange(self.image.shape[1]))
 
                     xi = np.transpose(np.vstack((self.x, self.y)))
 
                     vfx = interpolate.interpn(points, self.v, xi, method='cubic')
                     vfy = interpolate.interpn(points, self.u, xi, method='cubic')
-                    
-                    plt.quiver(self.x, self.y, vfx, vfy)
-                    plt.title(f"este grafico iteracion {j+1}")
-                    plt.show()
-
 
                 n_elem_inv_array = inv_array.shape[0]
                 n_elem_contour = len(self.x)
@@ -482,7 +474,7 @@ class ActiveContour:
                     inv_array = np.linalg.inv(abc_matrix)
 
                 # Deform the snake.
-                if fix_point_count > 0: # TODO and ~keyword_set(fClose)
+                if (fix_point_count > 0) and not bool(f_close):
 
                     x_tmp = np.matmul(inv_array, (self.gamma * self.x + self.kappa * vfx))
                     y_tmp = np.matmul(inv_array, (self.gamma * self.y + self.kappa * vfy))
@@ -496,15 +488,16 @@ class ActiveContour:
                             y_delta = np.abs(y_tmp - self.y)
 
                         # Re-interpolate the snake points.
-                        if perimeter_factor: # TODO keyword_set(perimeter_factor)
+                        if bool(perimeter_factor):
                             poly_line_length = 0.0
                             for k in range(len(x_tmp) - 1):
                                 poly_line_length += np.sqrt(np.square(x_tmp[k+1] - x_tmp[k]) 
                                                     + np.square(y_tmp[k+1] - y_tmp[k]))
                             npts_iter = max((round(poly_line_length) * max(perimeter_factor, 0.1)), 5)
 
-                        if not f_keep_point_count: # TODO: ~keyword_set(f_point_count)
+                        if not bool(f_keep_point_count):
                             self.arcSample(points=npts_iter)
+                            # self.x, self.y = polygon_line_sample(np.copy(self.x), np.copy(self.y), n_points_per_pix = npts_iter)
 
                         self.x = x_tmp
                         self.y = y_tmp
@@ -523,16 +516,17 @@ class ActiveContour:
                             y_delta = np.abs(y_tmp_2 - self.y)
 
                         # Re-interpolate the snake points.
-                        if perimeter_factor: # TODO keyword_set(perimeter_factor)
+                        if bool(perimeter_factor):
                             poly_line_length = 0.0
                             for k in range(len(self.x) - 1):
                                 poly_line_length += np.sqrt(np.square(x_tmp_2[k+1] - x_tmp_2[k]) 
                                                     + np.square(y_tmp_2[k+1] - y_tmp_2[k]))
                             npts_iter = max((round(poly_line_length) * max(perimeter_factor, 0.1)), 5)
 
-                        if not f_keep_point_count:
+                        if not bool(f_keep_point_count):
                             self.arcSample(points=npts_iter)
-                        
+                            # self.x, self.y = polygon_line_sample(np.copy(self.x), np.copy(self.y), n_points_per_pix = npts_iter)
+
                         # Put back the fixed points
                         x_tmp_2[0:fix_point_count] = x_fix_vec_1
                         x_tmp_2[npts_iter - fix_point_count + 1 :] = x_fix_vec_2
@@ -557,13 +551,14 @@ class ActiveContour:
                         self.y = np.matmul(inv_array, (self.gamma * self.y + self.kappa * vfy))
                     
                     # Re-interpolate the snake points.
-                    if perimeter_factor: # TODO: keyword_set(perimeter_factor)
+                    if bool(perimeter_factor):
                         npts_iter = max((round(polygon_perimeter(self.x, self.y) * max(perimeter_factor, 0.1))), 5)
                     
                     f_close = 1
 
-                    if not f_keep_point_count: # TODO: ~keyword_set(f_keep_point_count)
-                        self.arcSample(points=npts_iter-1 if f_close else npts_iter, f_close=f_close)
+                    if not bool(f_keep_point_count):
+                        # self.x, self.y = polygon_line_sample(np.copy(self.x), np.copy(self.y), n_points_per_pix = (npts_iter-1 if bool(f_close) else npts_iter), f_close_output=f_close)
+                        self.arcSample(points=((npts_iter-1) if f_close else npts_iter), f_close=f_close)
                 
                 if plot_contour > 0:
                     if j == 1: pass # TODO: oPlot, [*self.pX, (*self.pX)[0]], [*self.pY, (*self.pY)[0]], color = 255, linestyle = 1, thick = 3
@@ -612,7 +607,6 @@ class ActiveContour:
 
         return np.array([self.x, self.y], dtype=np.float64)
 
-    # Se asume un int en direction TODO: deberia poder admitir vectores?
     # TODO: este metodo puede ser estatico
     def gradient(self, image: np.ndarray, direction: int) -> np.ndarray:
 
@@ -645,7 +639,7 @@ class ActiveContour:
     def edgeMap(self) -> None:
 
         edge_map = np.sqrt(np.square(self.gradient(self.image, 0)) + np.square(self.gradient(self.image, 1)))
-        min_val = np.min(edge_map) # TODO: este valor por defecto podia serr 0, hablar con Jorge
+        min_val = np.min(edge_map) # TODO: este valor por defecto podia ser 0, hablar con Jorge
         max_val = np.max(edge_map)
 
         if max_val != min_val:

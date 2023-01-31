@@ -37,7 +37,7 @@ class TestActiveContour(unittest.TestCase):
         self.assertTrue(self.activeContour.kappa >= self.kappa_min_value)
         self.assertTrue(self.mu_max_value >= self.activeContour.mu >= self.mu_min_value)
         self.assertTrue(self.activeContour.gvf_iterations >= 1)
-        self.assertTrue(self.activeContour.iterations >= 1)
+        self.assertTrue(self.activeContour.contour_iterations >= 1)
 
         # [u, v] are initialized as None and the value is assigned in edgeMap()
         self.assertIsNone(self.activeContour.u)
@@ -77,11 +77,11 @@ class TestActiveContour(unittest.TestCase):
         ]
 
         expected_matrix_convolution = [
-            [ 0.66591765,      0.012273326,   0.052208400,    -1.0948680,      0.56363349],
-            [-0.59603944,      0.75719726,    0.054236547,    -0.46943980,    -0.92206375],
-            [-1.2139334,       1.7500138,     0.019178236,    -0.98239035,     1.2502566],
-            [-0.45590434,     -0.91020440,    0.92644553,     -0.35022358,    -0.74269571],
-            [ 0.33935901,      0.17016366,    0.11910681,     -1.0048016,      1.3236182]
+            [ 0.66591765,   0.012273326,   0.052208400,  -1.0948680,    0.56363349],
+            [-0.59603944,   0.75719726,    0.054236547,  -0.46943980,  -0.92206375],
+            [-1.2139334,    1.7500138,     0.019178236,  -0.98239035,   1.2502566],
+            [-0.45590434,  -0.91020440,    0.92644553,   -0.35022358,  -0.74269571],
+            [ 0.33935901,   0.17016366,    0.11910681,   -1.0048016,    1.3236182]
         ]
 
         obtained_matrix_convolution = self.activeContour.laplacian(test_matrix)
@@ -89,10 +89,6 @@ class TestActiveContour(unittest.TestCase):
         self.assertTrue(np.allclose(expected_matrix_convolution, obtained_matrix_convolution))
 
     def test_gradient(self):
-        
-        test_matrix_size = 5 # square matrix (n x n)
-        test_matrix = np.arange(test_matrix_size * test_matrix_size) \
-                        .reshape([test_matrix_size, test_matrix_size])
         
         test_matrix = [
             [-0.836854,  -0.172280,   0.187117,   1.61544,   -0.176774],
@@ -115,7 +111,7 @@ class TestActiveContour(unittest.TestCase):
             [ 1.18370,   -0.591640,  -0.0678143,  -0.297631,  -0.524693],
             [ 0.0276763,  0.709018,  -0.491933,   -0.296815,  -0.499359],
             [-0.849961,   0.518571,  -0.173566,   -0.248944,  -0.502445],
-            [-0.849961,   0.518571,  -0.173566,   -0.248944,  -0.502445],
+            [-0.849961,   0.518571,  -0.173566,   -0.248944,  -0.502445]
         ]
 
         obtained_gradient_0 = self.activeContour.gradient(test_matrix, 0)
