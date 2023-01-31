@@ -2,11 +2,10 @@ import numpy as np
 from scipy import interpolate
 from scipy.ndimage import convolve
 from scipy.interpolate import CubicSpline
-import matplotlib.pyplot as plt
 
 
-from geometryFunctions import *
-from hausdorffDistanceCalc import hausdorffDistanceFor2Dpoints
+from .geometryFunctions import *
+from .hausdorffDistanceCalc import hausdorffDistanceFor2Dpoints
 
 
 class ActiveContour:
@@ -200,6 +199,10 @@ class ActiveContour:
             Coordinates x and y of the image
              note:: in case xCoords is an invalid value, it returns -1.
         """
+        
+        self.x = np.array(self.x)
+        self.y = np.array(self.y)
+        
         return np.array([xyRes[0] * self.x, xyRes[1] * self.y], dtype=np.float64)
 
     def setContour(self, x: list, y: list) -> None:
