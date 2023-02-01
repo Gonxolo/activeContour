@@ -55,7 +55,7 @@ def get_coords_from_csv(filepath):
     
     return rois
 
-def get_image(image_path: str, padding=20) -> np.ndarray:
+def get_image(image_path: str, padding=100) -> np.ndarray:
     
     image_path = os.path.join(os.getcwd(), 'img', image_path)
 
