@@ -9,3 +9,4 @@ new_param_tests
 giffer.py
 *_contour_test.py
 .coverage
+_build
