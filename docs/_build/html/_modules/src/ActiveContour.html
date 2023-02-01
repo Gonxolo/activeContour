@@ -41,13 +41,28 @@
 
 
 <div class="viewcode-block" id="ActiveContour"><a class="viewcode-back" href="../../src.html#src.ActiveContour.ActiveContour">[docs]</a><span class="k">class</span> <span class="nc">ActiveContour</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class that represents the snake, the contour that deforms until reaching a state of equilibrium through an</span>
+<span class="sd">    optimization process. This class contains the methods needed to do that.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    adjustContour(perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, </span>
+<span class="sd">                    fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, </span>
+<span class="sd">                    convergence_thresh=None, convergence_metric_type=None, </span>
+<span class="sd">                    convergence_metric_value=None)</span>
+<span class="sd">                    Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it </span>
+<span class="sd">                    reaches a sate of equilibrium.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># TODO: Aqui recibimos los parametros para inicializar el algoritmo</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">x_coords</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">y_coords</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span>
                  <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">kappa</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">vf_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
                  <span class="n">contour_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;[Descripcion de la clase]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes ActiveContour with the parameters given by the user, or </span>
+<span class="sd">        the default parameter values if not given. </span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -92,7 +107,9 @@
 <span class="sd">        contour_iterations : int</span>
 <span class="sd">                The number of iterations to use in calculating the snake </span>
 <span class="sd">                positions. Default: 200.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="c1">#para asegurar tipo de arrays, poner el tipo (d_type=float64? o double)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -128,6 +145,13 @@
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="ActiveContour.get_x_coords"><a class="viewcode-back" href="../../src.html#src.ActiveContour.ActiveContour.get_x_coords">[docs]</a>    <span class="k">def</span> <span class="nf">get_x_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;It returns the array of coordinates x of the contour.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            X coordinates of the contour.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
@@ -137,6 +161,13 @@
             <span class="k">return</span>  <span class="o">-</span><span class="mi">1</span></div>
     
 <div class="viewcode-block" id="ActiveContour.get_y_coords"><a class="viewcode-back" href="../../src.html#src.ActiveContour.ActiveContour.get_y_coords">[docs]</a>    <span class="k">def</span> <span class="nf">get_y_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;It returns the array of coordinates y of the contour.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Y coordinates of the contour.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
@@ -146,6 +177,13 @@
             <span class="k">return</span>  <span class="o">-</span><span class="mi">1</span></div>
     
 <div class="viewcode-block" id="ActiveContour.get_GGVF"><a class="viewcode-back" href="../../src.html#src.ActiveContour.ActiveContour.get_GGVF">[docs]</a>    <span class="k">def</span> <span class="nf">get_GGVF</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;It returns the values of the GGVF, with its coordinates u and v.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            It returns an array with the value of the GGVF.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
@@ -161,12 +199,17 @@
             <span class="k">return</span>  <span class="o">-</span><span class="mi">1</span></div>
 
 <div class="viewcode-block" id="ActiveContour.laplacian"><a class="viewcode-back" href="../../src.html#src.ActiveContour.ActiveContour.laplacian">[docs]</a>    <span class="k">def</span> <span class="nf">laplacian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the laplacian of an image.</span>
 
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        [Descripcion de la clase]</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        image : np.ndarray</span>
+<span class="sd">            Image to apply the laplacian.</span>
 
-<span class="sd">        :param image: [Descripcion del parametro]</span>
-
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Returns the laplacian of the image, computing the convolution of it with a kernel.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
@@ -183,6 +226,8 @@
 
     <span class="c1"># TODO: Computar el campo GGVF para el contorno activo</span>
 <div class="viewcode-block" id="ActiveContour.calcGGVF"><a class="viewcode-back" href="../../src.html#src.ActiveContour.ActiveContour.calcGGVF">[docs]</a>    <span class="k">def</span> <span class="nf">calcGGVF</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;It computes the GGVF, and sets the values of self.u and self.v.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Calculate gradients [fx, fy] to initialize the vector field [u, v].</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edgeMap</span><span class="p">()</span>
@@ -294,7 +339,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        points : int, optional</span>
 <span class="sd">            The number of points in the output vectors, by default 50.</span>
-<span class="sd">        f_close : _type_, optional</span>
+<span class="sd">        f_close : bool, optional</span>
 <span class="sd">            Set this keyword to True to specify the contour curve, by default None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#if size(*self.pX,/n_dimensions) eq 2 then begin, x_in = reform(*self.pX) ... ya lo hace python</span>
@@ -373,34 +418,49 @@
                         <span class="n">fix_point_indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">f_keep_point_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">f_compute_convergence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                         <span class="n">convergence_thresh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">convergence_metric_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                         <span class="n">convergence_metric_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the GVF Active Contour code to completion.</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it </span>
+<span class="sd">        reaches a sate of equilibrium.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        perimeter_factor : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        f_close : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        plot_contour : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        fix_point_count : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        fix_point_indices : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        f_keep_point_count : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        f_compute_convergence : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        convergence_thresh : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        convergence_metric_type : _type_</span>
-<span class="sd">            _description_</span>
-<span class="sd">        convergence_metric_value : _type_</span>
-<span class="sd">            _description_</span>
+<span class="sd">        perimeter_factor: float, optional</span>
+<span class="sd">            It indicates the factor to compute the number of points to use for a given contour, by default None.</span>
+
+<span class="sd">        f_close: bool, optional</span>
+<span class="sd">            Flag to indicate if a contour must be closed, adding an extra point, by default None.</span>
+
+<span class="sd">        plot_contour: int, optional</span>
+<span class="sd">            Flag to indicate if a contour must be closed, adding an extra point, by default None.</span>
+
+<span class="sd">        fix_point_count: int, optional</span>
+<span class="sd">            Number of points to fix in the contour, by default None.</span>
+
+<span class="sd">        fix_point_indices: np.ndarray, optional</span>
+<span class="sd">            Array of indices of the points to be fixed.</span>
+
+<span class="sd">        f_keep_point_count: bool, optional</span>
+<span class="sd">            Flag to indicate that the number of points in the contour must be kept, and if False, it re-interpolates them.</span>
+
+<span class="sd">        f_compute_convergence: bool, optional</span>
+<span class="sd">            Flaf to indicate that the convergence must be computed.</span>
+
+<span class="sd">        convergence_thresh: float, optional</span>
+<span class="sd">            Value of the convergence limit.</span>
+
+<span class="sd">        convergence_metric_type: string, optional</span>
+<span class="sd">            It indicates the type of metric to compute the variation between the contour in the current</span>
+<span class="sd">            iteration and the last iteration, until reaching convergence.</span>
+
+<span class="sd">        convergence_metric_value: float, optional</span>
+<span class="sd">            It indicates that the convergence must be computed, in case the flags f_compute_convergence or </span>
+<span class="sd">            f_use_convergence_threshold where not set.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        The {x, y} contour point list.</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            It returns an array with the coordinates x and y of the contour after the adjustment, when the state of </span>
+<span class="sd">            equilibrium is reached.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">plot_contour</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">plot_contour</span> <span class="o">=</span> <span class="mi">0</span>
@@ -644,6 +704,20 @@
 
     <span class="c1"># TODO: este metodo puede ser estatico</span>
 <div class="viewcode-block" id="ActiveContour.gradient"><a class="viewcode-back" href="../../src.html#src.ActiveContour.ActiveContour.gradient">[docs]</a>    <span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the gradient of the image&#39;s intensity.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        image : np.ndarray</span>
+<span class="sd">            Array with the intensity values per pixel of the image.</span>
+<span class="sd">        direction : int</span>
+<span class="sd">            It indicates the direction in which to calculate the gradient.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Returns the result of computing the gradient of the image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># TODO: si la direccion admite vectores entonces</span>
         <span class="c1"># Revisa la cantidad de elementos de la direccion</span>
@@ -672,6 +746,8 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theGradient</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ActiveContour.edgeMap"><a class="viewcode-back" href="../../src.html#src.ActiveContour.ActiveContour.edgeMap">[docs]</a>    <span class="k">def</span> <span class="nf">edgeMap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the edge map of a given image, and sets the values of the coordinates u and v of the GGVF.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">edge_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
         <span class="n">min_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">edge_map</span><span class="p">)</span> <span class="c1"># TODO: este valor por defecto podia ser 0, hablar con Jorge</span>
