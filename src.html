@@ -35,20 +35,394 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
-<section id="src-activecontour-module">
-<h2>src.ActiveContour module<a class="headerlink" href="#src-activecontour-module" title="Permalink to this heading">¶</a></h2>
+<section id="module-src.ActiveContour">
+<span id="src-activecontour-module"></span><h2>src.ActiveContour module<a class="headerlink" href="#module-src.ActiveContour" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ActiveContour.</span></span><span class="sig-name descname"><span class="pre">ActiveContour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vf_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contour_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.adjustContour">
+<span class="sig-name descname"><span class="pre">adjustContour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">perimeter_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_close</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_contour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_point_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_point_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_keep_point_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_compute_convergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_metric_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_metric_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.adjustContour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.adjustContour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it 
+reaches a sate of equilibrium.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>perimeter_factor: float, optional</dt><dd><p>It indicates the factor to compute the number of points to use for a given contour, by default None.</p>
+</dd>
+<dt>f_close: bool, optional</dt><dd><p>Flag to indicate if a contour must be closed, adding an extra point, by default None.</p>
+</dd>
+<dt>plot_contour: int, optional</dt><dd><p>Flag to indicate if a contour must be closed, adding an extra point, by default None.</p>
+</dd>
+<dt>fix_point_count: int, optional</dt><dd><p>Number of points to fix in the contour, by default None.</p>
+</dd>
+<dt>fix_point_indices: np.ndarray, optional</dt><dd><p>Array of indices of the points to be fixed.</p>
+</dd>
+<dt>f_keep_point_count: bool, optional</dt><dd><p>Flag to indicate that the number of points in the contour must be kept, and if False, it re-interpolates them.</p>
+</dd>
+<dt>f_compute_convergence: bool, optional</dt><dd><p>Flaf to indicate that the convergence must be computed.</p>
+</dd>
+<dt>convergence_thresh: float, optional</dt><dd><p>Value of the convergence limit.</p>
+</dd>
+<dt>convergence_metric_type: string, optional</dt><dd><p>It indicates the type of metric to compute the variation between the contour in the current
+iteration and the last iteration, until reaching convergence.</p>
+</dd>
+<dt>convergence_metric_value: float, optional</dt><dd><p>It indicates that the convergence must be computed, in case the flags f_compute_convergence or 
+f_use_convergence_threshold where not set.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>It returns an array with the coordinates x and y of the contour after the adjustment, when the state of 
+equilibrium is reached.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.arcSample">
+<span class="sig-name descname"><span class="pre">arcSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_close</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.arcSample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.arcSample" title="Permalink to this definition">¶</a></dt>
+<dd><p>It takes a closed curve and re-samples it in equal arc lengths.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>points<span class="classifier">int, optional</span></dt><dd><p>The number of points in the output vectors, by default 50.</p>
+</dd>
+<dt>f_close<span class="classifier">bool, optional</span></dt><dd><p>Set this keyword to True to specify the contour curve, by default None.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.calcGGVF">
+<span class="sig-name descname"><span class="pre">calcGGVF</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.calcGGVF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.calcGGVF" title="Permalink to this definition">¶</a></dt>
+<dd><p>It computes the GGVF, and sets the values of self.u and self.v.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.edgeMap">
+<span class="sig-name descname"><span class="pre">edgeMap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.edgeMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.edgeMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the edge map of a given image, and sets the values of the coordinates u and v of the GGVF.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.getCoords">
+<span class="sig-name descname"><span class="pre">getCoords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyRes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.])</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.getCoords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.getCoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>It returns the coordinates x and y of the image.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>xyRes<span class="classifier">np.ndarray of floats, optional</span></dt><dd><p>Resolution of the image, by default np.array([1.,1.])</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><dl class="simple">
+<dt>Coordinates x and y of the image</dt><dd><p>note:: in case xCoords is an invalid value, it returns -1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.getDistance">
+<span class="sig-name descname"><span class="pre">getDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyRes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.])</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.getDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.getDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method calculates the distance between consecutive points.</p>
+<section id="id4">
+<h3>Parameters:<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>xyRes: np.ndarray of floats, optional.</dt><dd><p>Resolution of the image, by default np.array([1,1]).</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h3>Returns:<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>Array of floats with the euclidean distance between the consecutive points of a segment.
+note:: in case xCoords is an invalid value, it returns -1.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.getPerimeter">
+<span class="sig-name descname"><span class="pre">getPerimeter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyRes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.])</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.getPerimeter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.getPerimeter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method calculates the perimeter of a contour.</p>
+<section id="id6">
+<h3>Parameters:<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>xyRes: np.ndarray of floats, optional.</dt><dd><p>Resolution of the image. Default: np.array([1,1]).</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h3>Returns:<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>float</dt><dd><p>Value of the perimeter of a contour.
+note:: in case xCoords is an invalid value, it returns -1.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.get_GGVF">
+<span class="sig-name descname"><span class="pre">get_GGVF</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.get_GGVF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.get_GGVF" title="Permalink to this definition">¶</a></dt>
+<dd><p>It returns the values of the GGVF, with its coordinates u and v.</p>
+<section id="id8">
+<h3>Returns<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>It returns an array with the value of the GGVF.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.get_x_coords">
+<span class="sig-name descname"><span class="pre">get_x_coords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.get_x_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.get_x_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>It returns the array of coordinates x of the contour.</p>
+<section id="id9">
+<h3>Returns<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>X coordinates of the contour.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.get_y_coords">
+<span class="sig-name descname"><span class="pre">get_y_coords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.get_y_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.get_y_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>It returns the array of coordinates y of the contour.</p>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>Y coordinates of the contour.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.gradient">
+<span class="sig-name descname"><span class="pre">gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the gradient of the image’s intensity.</p>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>image<span class="classifier">np.ndarray</span></dt><dd><p>Array with the intensity values per pixel of the image.</p>
+</dd>
+<dt>direction<span class="classifier">int</span></dt><dd><p>It indicates the direction in which to calculate the gradient.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Returns<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>Returns the result of computing the gradient of the image.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.laplacian">
+<span class="sig-name descname"><span class="pre">laplacian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.laplacian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.laplacian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the laplacian of an image.</p>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>image<span class="classifier">np.ndarray</span></dt><dd><p>Image to apply the laplacian.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h3>Returns<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>Returns the laplacian of the image, computing the convolution of it with a kernel.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.plotGVF">
+<span class="sig-name descname"><span class="pre">plotGVF</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.plotGVF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.plotGVF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.setContour">
+<span class="sig-name descname"><span class="pre">setContour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.setContour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.setContour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the [x, y] coordinates for the active contour.</p>
+<section id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>x<span class="classifier">list</span></dt><dd><p><cite>x</cite> coordinate array of the contour to be set.</p>
+</dd>
+<dt>y<span class="classifier">list</span></dt><dd><p><cite>y</cite> coordinate array of the contour to be set.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="src-filteractivecontour-module">
 <h2>src.FilterActiveContour module<a class="headerlink" href="#src-filteractivecontour-module" title="Permalink to this heading">¶</a></h2>
 </section>
-<section id="src-geometryfunctions-module">
-<h2>src.geometryFunctions module<a class="headerlink" href="#src-geometryfunctions-module" title="Permalink to this heading">¶</a></h2>
+<section id="module-src.geometryFunctions">
+<span id="src-geometryfunctions-module"></span><h2>src.geometryFunctions module<a class="headerlink" href="#module-src.geometryFunctions" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.geometryFunctions.calcNorm_L1ForVector">
+<span class="sig-prename descclassname"><span class="pre">src.geometryFunctions.</span></span><span class="sig-name descname"><span class="pre">calcNorm_L1ForVector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/geometryFunctions.html#calcNorm_L1ForVector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.geometryFunctions.calcNorm_L1ForVector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the L1-norm for a vector of n components.</p>
+<section id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>vec<span class="classifier">np.ndarray</span></dt><dd><p>vector</p>
+</dd>
+</dl>
 </section>
-<section id="src-hausdorffdistancecalc-module">
-<h2>src.hausdorffDistanceCalc module<a class="headerlink" href="#src-hausdorffdistancecalc-module" title="Permalink to this heading">¶</a></h2>
+<section id="id17">
+<h3>Returns<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>float</dt><dd><p>Value of the L1-norm for a vector of n components.</p>
+</dd>
+</dl>
 </section>
-<section id="src-utils-module">
-<h2>src.utils module<a class="headerlink" href="#src-utils-module" title="Permalink to this heading">¶</a></h2>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.geometryFunctions.calcNorm_L2ForVector">
+<span class="sig-prename descclassname"><span class="pre">src.geometryFunctions.</span></span><span class="sig-name descname"><span class="pre">calcNorm_L2ForVector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/geometryFunctions.html#calcNorm_L2ForVector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.geometryFunctions.calcNorm_L2ForVector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the L2-norm for a vector of n components.</p>
+<section id="id18">
+<h3>Parameters<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>vec<span class="classifier">np.ndarray</span></dt><dd><p>vector</p>
+</dd>
+</dl>
+</section>
+<section id="id19">
+<h3>Returns<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>float</dt><dd><p>Value of the L2-norm for a vector of n components.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.geometryFunctions.calcNorm_LInfiniteForVector">
+<span class="sig-prename descclassname"><span class="pre">src.geometryFunctions.</span></span><span class="sig-name descname"><span class="pre">calcNorm_LInfiniteForVector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/geometryFunctions.html#calcNorm_LInfiniteForVector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.geometryFunctions.calcNorm_LInfiniteForVector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the L-infinity-norm for a vector of n components.</p>
+<section id="id20">
+<h3>Parameters<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>vec<span class="classifier">np.ndarray</span></dt><dd><p>vector</p>
+</dd>
+</dl>
+</section>
+<section id="id21">
+<h3>Returns<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>float</dt><dd><p>Value of the L-infinity-norm for a vector of n components.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.geometryFunctions.polygon_line_sample">
+<span class="sig-prename descclassname"><span class="pre">src.geometryFunctions.</span></span><span class="sig-name descname"><span class="pre">polygon_line_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points_per_pix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_close_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_vector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interp_flag_vector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_force_zero_flag_vector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/geometryFunctions.html#polygon_line_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.geometryFunctions.polygon_line_sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.geometryFunctions.polygon_perimeter">
+<span class="sig-prename descclassname"><span class="pre">src.geometryFunctions.</span></span><span class="sig-name descname"><span class="pre">polygon_perimeter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyFactor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[1.0,</span> <span class="pre">1.0]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/geometryFunctions.html#polygon_perimeter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.geometryFunctions.polygon_perimeter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Computes the perimeter for a given polygon (list of 2D points).</dt><dd><p>The polygon is not required to be closed.</p>
+</dd>
+</dl>
+<section id="id22">
+<h3>Parameters<a class="headerlink" href="#id22" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>x<span class="classifier">list</span></dt><dd><p>The input polygon x-coordinate array.</p>
+</dd>
+<dt>y<span class="classifier">list</span></dt><dd><p>The input polygon y-coordinate array.</p>
+</dd>
+<dt>xyFactor<span class="classifier">list, optional</span></dt><dd><p>Scaling factor in x and y (array of 2 elements).</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h3>Returns<a class="headerlink" href="#id23" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>The perimeter of the given polygon.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src.hausdorffDistanceCalc">
+<span id="src-hausdorffdistancecalc-module"></span><h2>src.hausdorffDistanceCalc module<a class="headerlink" href="#module-src.hausdorffDistanceCalc" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.hausdorffDistanceCalc.hausdorffDistanceFor2Dpoints">
+<span class="sig-prename descclassname"><span class="pre">src.hausdorffDistanceCalc.</span></span><span class="sig-name descname"><span class="pre">hausdorffDistanceFor2Dpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/hausdorffDistanceCalc.html#hausdorffDistanceFor2Dpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.hausdorffDistanceCalc.hausdorffDistanceFor2Dpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Hausdorff Distance for 2D points.</p>
+<section id="id24">
+<h3>Parameters<a class="headerlink" href="#id24" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>x1<span class="classifier">np.ndarray</span></dt><dd><p>x coordinate of point 1</p>
+</dd>
+<dt>y1<span class="classifier">np.ndarray</span></dt><dd><p>y coordinate of point 1</p>
+</dd>
+<dt>x2<span class="classifier">np.ndarray</span></dt><dd><p>x coordinate of point 2</p>
+</dd>
+<dt>y2<span class="classifier">np.ndarray</span></dt><dd><p>y coordinate of point 2</p>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h3>Returns<a class="headerlink" href="#id25" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>float</dt><dd><p>Value of the Hausdorff Distance for 2D points</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src.utils">
+<span id="src-utils-module"></span><h2>src.utils module<a class="headerlink" href="#module-src.utils" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.get_coords_from_csv">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">get_coords_from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#get_coords_from_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.get_coords_from_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.get_image">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">get_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#get_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.get_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.load_params">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">load_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/src/utils.html#load_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.load_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-src">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src" title="Permalink to this heading">¶</a></h2>
