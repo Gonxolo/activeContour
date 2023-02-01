@@ -41,13 +41,25 @@
 <dt class="sig sig-object py" id="src.ActiveContour.ActiveContour">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.ActiveContour.</span></span><span class="sig-name descname"><span class="pre">ActiveContour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vf_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contour_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that represents the snake, the contour that deforms until reaching a state of equilibrium through an
+optimization process. This class contains the methods needed to do that.</p>
+<section id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>adjustContour(perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, </dt><dd><p>fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
+convergence_thresh=None, convergence_metric_type=None, 
+convergence_metric_value=None)
+Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it 
+reaches a sate of equilibrium.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.ActiveContour.ActiveContour.adjustContour">
 <span class="sig-name descname"><span class="pre">adjustContour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">perimeter_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_close</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_contour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_point_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fix_point_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_keep_point_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_compute_convergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_metric_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_metric_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.adjustContour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.adjustContour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it 
 reaches a sate of equilibrium.</p>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h3>
+<h4>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>perimeter_factor: float, optional</dt><dd><p>It indicates the factor to compute the number of points to use for a given contour, by default None.</p>
 </dd>
@@ -74,7 +86,7 @@ f_use_convergence_threshold where not set.</p>
 </dl>
 </section>
 <section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading">¶</a></h3>
+<h4>Returns<a class="headerlink" href="#returns" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>np.ndarray</dt><dd><p>It returns an array with the coordinates x and y of the contour after the adjustment, when the state of 
 equilibrium is reached.</p>
@@ -88,7 +100,7 @@ equilibrium is reached.</p>
 <span class="sig-name descname"><span class="pre">arcSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_close</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.arcSample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.arcSample" title="Permalink to this definition">¶</a></dt>
 <dd><p>It takes a closed curve and re-samples it in equal arc lengths.</p>
 <section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<h4>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>points<span class="classifier">int, optional</span></dt><dd><p>The number of points in the output vectors, by default 50.</p>
 </dd>
@@ -115,14 +127,14 @@ equilibrium is reached.</p>
 <span class="sig-name descname"><span class="pre">getCoords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyRes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.])</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.getCoords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.getCoords" title="Permalink to this definition">¶</a></dt>
 <dd><p>It returns the coordinates x and y of the image.</p>
 <section id="id2">
-<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<h4>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>xyRes<span class="classifier">np.ndarray of floats, optional</span></dt><dd><p>Resolution of the image, by default np.array([1.,1.])</p>
 </dd>
 </dl>
 </section>
 <section id="id3">
-<h3>Returns<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<h4>Returns<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>np.ndarray</dt><dd><dl class="simple">
 <dt>Coordinates x and y of the image</dt><dd><p>note:: in case xCoords is an invalid value, it returns -1.</p>
@@ -138,14 +150,14 @@ equilibrium is reached.</p>
 <span class="sig-name descname"><span class="pre">getDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyRes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.])</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.getDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.getDistance" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method calculates the distance between consecutive points.</p>
 <section id="id4">
-<h3>Parameters:<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<h4>Parameters:<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>xyRes: np.ndarray of floats, optional.</dt><dd><p>Resolution of the image, by default np.array([1,1]).</p>
 </dd>
 </dl>
 </section>
 <section id="id5">
-<h3>Returns:<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<h4>Returns:<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>np.ndarray</dt><dd><p>Array of floats with the euclidean distance between the consecutive points of a segment.
 note:: in case xCoords is an invalid value, it returns -1.</p>
@@ -159,14 +171,14 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 <span class="sig-name descname"><span class="pre">getPerimeter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyRes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.])</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.getPerimeter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.getPerimeter" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method calculates the perimeter of a contour.</p>
 <section id="id6">
-<h3>Parameters:<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<h4>Parameters:<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>xyRes: np.ndarray of floats, optional.</dt><dd><p>Resolution of the image. Default: np.array([1,1]).</p>
 </dd>
 </dl>
 </section>
 <section id="id7">
-<h3>Returns:<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<h4>Returns:<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>float</dt><dd><p>Value of the perimeter of a contour.
 note:: in case xCoords is an invalid value, it returns -1.</p>
@@ -180,7 +192,7 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 <span class="sig-name descname"><span class="pre">get_GGVF</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.get_GGVF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.get_GGVF" title="Permalink to this definition">¶</a></dt>
 <dd><p>It returns the values of the GGVF, with its coordinates u and v.</p>
 <section id="id8">
-<h3>Returns<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h3>
+<h4>Returns<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>np.ndarray</dt><dd><p>It returns an array with the value of the GGVF.</p>
 </dd>
@@ -193,7 +205,7 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 <span class="sig-name descname"><span class="pre">get_x_coords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.get_x_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.get_x_coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>It returns the array of coordinates x of the contour.</p>
 <section id="id9">
-<h3>Returns<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+<h4>Returns<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>np.ndarray</dt><dd><p>X coordinates of the contour.</p>
 </dd>
@@ -206,7 +218,7 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 <span class="sig-name descname"><span class="pre">get_y_coords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.get_y_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.get_y_coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>It returns the array of coordinates y of the contour.</p>
 <section id="id10">
-<h3>Returns<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h3>
+<h4>Returns<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>np.ndarray</dt><dd><p>Y coordinates of the contour.</p>
 </dd>
@@ -219,7 +231,7 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 <span class="sig-name descname"><span class="pre">gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.gradient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the gradient of the image’s intensity.</p>
 <section id="id11">
-<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h3>
+<h4>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>image<span class="classifier">np.ndarray</span></dt><dd><p>Array with the intensity values per pixel of the image.</p>
 </dd>
@@ -228,7 +240,7 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 </dl>
 </section>
 <section id="id12">
-<h3>Returns<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h3>
+<h4>Returns<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>np.ndarray</dt><dd><p>Returns the result of computing the gradient of the image.</p>
 </dd>
@@ -241,14 +253,14 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 <span class="sig-name descname"><span class="pre">laplacian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.laplacian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.laplacian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the laplacian of an image.</p>
 <section id="id13">
-<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
+<h4>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>image<span class="classifier">np.ndarray</span></dt><dd><p>Image to apply the laplacian.</p>
 </dd>
 </dl>
 </section>
 <section id="id14">
-<h3>Returns<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h3>
+<h4>Returns<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>np.ndarray</dt><dd><p>Returns the laplacian of the image, computing the convolution of it with a kernel.</p>
 </dd>
@@ -266,7 +278,7 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 <span class="sig-name descname"><span class="pre">setContour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/ActiveContour.html#ActiveContour.setContour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.ActiveContour.ActiveContour.setContour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the [x, y] coordinates for the active contour.</p>
 <section id="id15">
-<h3>Parameters<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h3>
+<h4>Parameters<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h4>
 <dl class="simple">
 <dt>x<span class="classifier">list</span></dt><dd><p><cite>x</cite> coordinate array of the contour to be set.</p>
 </dd>
@@ -276,6 +288,7 @@ note:: in case xCoords is an invalid value, it returns -1.</p>
 </section>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 </section>
