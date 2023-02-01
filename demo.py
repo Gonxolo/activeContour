@@ -6,12 +6,15 @@ import matplotlib.pyplot as plt
 from src.ActiveContour import ActiveContour
 from src.utils import load_params, get_image, get_coords_from_csv
 
+
 PATH_TO_THIS_FILE = os.path.dirname(__file__)
 
+
 def main(plot_results=True, verbose=True):
-    
+
     # Demofiles Path
     files_path = os.path.join(PATH_TO_THIS_FILE, "demofiles")
+
 
     # Parameter Loading
     params_path = os.path.join(files_path, "activecontour_params.csv")
@@ -33,6 +36,8 @@ def main(plot_results=True, verbose=True):
     contour_iterations = params.get('contour_iterations', None)
     vf_iterations = params.get('vf_iterations', None)
 
+
+    # Snake Initialization
     snake = ActiveContour(image=image, alpha=alpha, beta=beta, gamma=gamma,
     kappa= kappa, mu=mu, contour_iterations=contour_iterations,
     vf_iterations=vf_iterations)
@@ -40,6 +45,8 @@ def main(plot_results=True, verbose=True):
     if snake.kappa != 0:
         snake.calcGGVF()
 
+
+    # Contour Coordinates Loading
     coords_file_path = os.path.join(files_path, "activecontour_contours.csv")
 
     coords = get_coords_from_csv(coords_file_path)
@@ -48,6 +55,8 @@ def main(plot_results=True, verbose=True):
         _plot_x = np.array([])
         _plot_y = np.array([])
 
+
+    # Iterate through every ROI and contour
     i = 0
     while i < len(coords):
 
