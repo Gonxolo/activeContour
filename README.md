@@ -28,16 +28,16 @@
 </p>
 
 3. Once the download is complete unzip the files and access the `activeContours` folder
-4. Inside the folder click on the "File" ("Archivo") button on the top bar
+4. Inside the folder click adress bar
 
 <p align="center">
-  <img src="https://i.imgur.com/ntEocLF.png" width="760" />
+  <img src="https://i.imgur.com/EC4BCOu.png" width="760" />
 </p>
 
-5. Then click on "Open Windows PowerShell" ("Abrir Windows PowerShell")
+5. Write cmd on the adress and press Enter
 
 <p align="center">
-  <img src="https://i.imgur.com/FIKM3Op.png" width="760" />
+  <img src="https://i.imgur.com/6YDv5Vh.png" width="760" />
 </p>
 
 6. Inside PowerShell write the following command and then press Enter
