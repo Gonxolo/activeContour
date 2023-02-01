@@ -9,14 +9,28 @@ from .hausdorffDistanceCalc import hausdorffDistanceFor2Dpoints
 
 
 class ActiveContour:
+    """Class that represents the snake, the contour that deforms until reaching a state of equilibrium through an
+    optimization process. This class contains the methods needed to do that.
+
+    Methods
+    -------
+
+    adjustContour(perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, 
+                    fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
+                    convergence_thresh=None, convergence_metric_type=None, 
+                    convergence_metric_value=None)
+                    Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it 
+                    reaches a sate of equilibrium.
+
+    """
 
     # TODO: Aqui recibimos los parametros para inicializar el algoritmo
     def __init__(self, image: list, x_coords: list = None, y_coords: list = None, alpha: float = 0.1, beta: float = 0.25,
                  gamma: float = 1.0, kappa: float = 0.0, mu: float = 0.1, vf_iterations: int = 100,
                  contour_iterations: int = 200) -> None:
 
-        """Class that represents the snake, the contour that deforms until reaching a state of equilibrium through an
-         optimization process. This class contains the methods needed to do that.
+        """Initializes ActiveContour with the parameters given by the user, or 
+        the default parameter values if not given. 
 
         Parameters
         ----------
@@ -62,16 +76,6 @@ class ActiveContour:
                 The number of iterations to use in calculating the snake 
                 positions. Default: 200.
 
-
-        Methods
-        -------
-
-        adjustContour(perimeter_factor=None, f_close=None, plot_contour=None, fix_point_count=None, 
-                        fix_point_indices=None, f_keep_point_count=None, f_compute_convergence=None, 
-                        convergence_thresh=None, convergence_metric_type=None, 
-                        convergence_metric_value=None)
-                        Runs the GGVF Active Contour code to completion. It deforms iteratively the initial contour until it 
-                        reaches a sate of equilibrium.
         """
         
         #para asegurar tipo de arrays, poner el tipo (d_type=float64? o double)
