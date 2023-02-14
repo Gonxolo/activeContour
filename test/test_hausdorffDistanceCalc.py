@@ -10,9 +10,12 @@ class TestHausdorffDistanceCalc(unittest.TestCase):
         self.x2 = np.array([0.00923687, 0.782694, 0.242533, -0.5265676, 0.466242])
         self.y2 = np.array([0.282261, -0.834615, -0.484865, -0.173802, -1.94928])
     
-    def hausdorffDistanceFor2Dpoints(self):
-        #en IDL 1.0849839
-        self.assertAlmostEqual(hausdorffDistanceFor2Dpoints(self.x1, self.y1, self.x2, self.y2))
+    def test_hausdorffDistanceFor2Dpoints(self):
+
+        expected_hausdorff = 1.08498390 # Obtained on IDL
+        obtained_hausdorff = hausdorffDistanceFor2Dpoints(self.x1, self.y1, self.x2, self.y2)
+
+        self.assertAlmostEqual(expected_hausdorff, obtained_hausdorff, places=6)
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main() # pragma: no cover
