@@ -1,4 +1,5 @@
 import numpy as np
+from math import ceil
 
 
 def polygon_perimeter(x: list, y: list, xyFactor: list = [1.0, 1.0]) -> np.ndarray:
@@ -87,7 +88,7 @@ def calcNorm_LInfiniteForVector(vec):
     """
     return np.amax(np.abs(vec))
 
-def polygon_line_sample(x, y, n_points_per_pix = None, f_close_output = None,
+def polygon_line_sample(x, y, n_pts = 16, f_close_output = None,
                         flag_vector = None, interp_flag_vector = None, 
                         f_force_zero_flag_vector = None) -> np.ndarray:
 
@@ -100,33 +101,24 @@ def polygon_line_sample(x, y, n_points_per_pix = None, f_close_output = None,
     if len(y_in.shape) > 1:
         y_in = np.squeeze(y_in)
     
-    n_segments = len(x_in)
+    n_segments = len(x_in) - int(not bool(f_close_output))
 
     if n_segments < 1: 
         return
 
-    seg_limit = 2
-    if bool(f_close_output):
-        seg_limit = 1
-        x_in = np.concatenate((x_in, [x_in[0]]))
-        y_in = np.concatenate((y_in, [y_in[0]]))
-    
-    x_out = np.array([x_in[0]])
-    y_out = np.array([y_in[0]])
+    x_out = np.array([])
+    y_out = np.array([])
 
-    if not bool(n_points_per_pix):
-        n_points_per_pix = 1
+    n_pts_seg = ceil(n_pts/n_segments)
 
-    for i in range(n_segments - seg_limit + 1):
-        delta_x = x_in[i+1] - x_in[i]
-        delta_y = y_in[i+1] - y_in[i]
-        seg_len = np.sqrt(np.square(delta_x) + np.square(delta_y))
-        n_pts_seg = np.ceil(n_points_per_pix * seg_len) + 1
-        delta_x_seg = delta_x / (n_pts_seg-1)
-        delta_y_seg = delta_y / (n_pts_seg-1)
-        for j in range(1, int(n_pts_seg)):
-            x_out = np.concatenate((x_out, [x_in[i] + j*delta_x_seg]))
-            y_out = np.concatenate((y_out, [y_in[i] + j*delta_y_seg]))
+    iter_n = len(x_in) 
 
+    for i in range(iter_n - int(not bool(f_close_output))):
+        x_out = np.concatenate((x_out, np.linspace(x_in[i], x_in[(i+1)%iter_n], num=n_pts_seg, endpoint=False)))
+        y_out = np.concatenate((y_out, np.linspace(y_in[i], y_in[(i+1)%iter_n], num=n_pts_seg, endpoint=False)))
+
+    if ((x_in[-1] != x_out[-1]) or (y_in[-1] != y_out[-1])) and not f_close_output:
+        x_out = np.concatenate((x_out, [x_in[-1]]))
+        y_out = np.concatenate((y_out, [y_in[-1]]))
 
     return x_out, y_out
