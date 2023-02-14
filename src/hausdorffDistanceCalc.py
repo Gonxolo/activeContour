@@ -30,7 +30,4 @@ def hausdorffDistanceFor2Dpoints(x1, y1, x2, y2):
     for j in range(n_verts2):
         dist21[j] = np.min(np.sqrt(np.square(x1 - x2[i]) + np.square(y1 - y2[i])))
     
-    if np.max(dist12) > np.max(dist21):
-        return np.amax(dist12)
-    else:
-        return np.amax(dist21)
+    return np.max((np.max(dist12), np.max(dist21)))
