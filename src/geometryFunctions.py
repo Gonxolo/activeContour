@@ -122,3 +122,24 @@ def polygon_line_sample(x, y, n_pts = 16, f_close_output = None,
         y_out = np.concatenate((y_out, [y_in[-1]]))
 
     return x_out, y_out
+
+def get_curv_d(x: np.ndarray, y: np.ndarray, f_close=True) -> np.ndarray:
+
+    if len(x) <= 3 or len(y) <= 3:
+        return -1
+
+    gx = np.roll(x, -1) - np.array(x)
+    gy = np.roll(y, -1) - np.array(y)
+    gxx = np.roll(x, 1) - 2 * np.array(x) + np.roll(x, -1)
+    gyy = np.roll(y, 1) - 2 * np.array(y) + np.roll(y, -1)
+    curv = ((gx * gyy - gy * gxx) / (np.power((np.square(gx) + np.square(gy)), 1.5))) # * 2 / np.sqrt(2)
+
+    curv[curv == -np.inf] = 0
+    curv[curv == np.inf] = 0
+    curv[np.isnan(curv)] = 0
+
+    if not f_close:
+        curv[0] = 0
+        curv[-1] = 0
+
+    return curv
