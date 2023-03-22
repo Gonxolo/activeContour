@@ -20,21 +20,21 @@
 
 ### Downlading the files
 
-1. Access the GitHub repository at https://github.com/Gonxolo/activeContour
-2. Download the files from the repo
+1. Access the GitHub repository, currently at https://github.com/Gonxolo/activeContour
+2. Download the files from the repository. To do this, click on the "Code" button and then on "Download ZIP"...
 
 <p align="center">
   <img src="https://i.imgur.com/iKm3dF5_d.webp?maxwidth=760&fidelity=grand" />
 </p>
 
-3. Once the download is complete unzip the files and access the `activeContours` folder
-4. Inside the folder click adress bar
+3. Once the download is complete unzip the files and go into the `activeContours` folder (you may need a decompression software for ZIP files).
+4. Inside the folder click the adress bar...
 
 <p align="center">
   <img src="https://i.imgur.com/EC4BCOu.png" width="760" />
 </p>
 
-5. Write cmd on the adress and press Enter
+5. Write "cmd" on the adress and press Enter...
 
 <p align="center">
   <img src="https://i.imgur.com/6YDv5Vh.png" width="760" />
@@ -46,7 +46,7 @@
 pip install -r requirements.txt
 ```
 
-This will install every necessary package for the execution of the algorithm.
+This will install every necessary package for the execution of the program.
 
 7. Once the previous step is complete write the following command and press Enter:
 
@@ -54,8 +54,7 @@ This will install every necessary package for the execution of the algorithm.
 python demo.py
 ```
 
-`demo.py` is a file made for demonstration purposes, it executes the algorithm on an image (`demo_img.tif`) with 10 ROIs included on `demofiles` folder, the program
-prints the number of the ROI it is currently working on, and once it has processed every ROI the following image should be displayed on screen.
+`demo.py` is a file made for demonstration purposes: it executes the program on a sample image (`demo_img.tif`) with 10 ROIs included within the `demofiles` folder, the program, prints the number of the ROI it is currently processing, and once it has processed every ROI an output image should be displayed on screen...
 
 <p align="center">
   <img src="https://i.imgur.com/WAXtYlt.png" width="760" />
