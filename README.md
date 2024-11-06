@@ -1,4 +1,4 @@
-# Snakes - Active Contour
+# Snakes - Active Contours
 
 ## About this Repository
 We present an implementation of a Parametric Active Contour Model to adjust object
@@ -16,7 +16,7 @@ algorithm can work with polylines (non-closed curves) as well.
 
 The specific model implemented here is known as "GGVF snake". It combines the parametric 
 contour model from Kass et al. (1988) with the Generalized Gradient Vector Flow from Xu & Prince (1999).
-Contour interpolation and numerical algorithms have been developed at SCIAN-Lab (Fanani et al., 2010; Jara-Wilde, 2020).
+Contour interpolation and numerical algorithms have been developed at SCIAN-Lab (Fanani et al., 2010; Jara-Wilde et al., 2020).
 
 ##
 References
